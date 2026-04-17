@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI & Kiro 学习计划</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Microsoft YaHei', sans-serif; background: #0f0f1a; color: #e0e0e0; min-height: 100vh; }
+
+    header {
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid #2a2a4a;
+    }
+    header h1 { font-size: 2.2rem; color: #7c6af7; margin-bottom: 8px; }
+    header p { color: #888; font-size: 1rem; }
+
+    .progress-bar-wrap {
+      background: #1a1a2e;
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 1px solid #2a2a4a;
+    }
+    .progress-bar-wrap span { color: #7c6af7; font-weight: bold; white-space: nowrap; }
+    .progress-bar { flex: 1; height: 10px; background: #2a2a4a; border-radius: 10px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, #7c6af7, #a78bfa); border-radius: 10px; transition: width 0.5s; }
+    .progress-pct { color: #a78bfa; font-weight: bold; white-space: nowrap; }
+
+    .container { max-width: 960px; margin: 0 auto; padding: 30px 20px; }
+
+    .section-title {
+      font-size: 1.3rem;
+      color: #a78bfa;
+      margin: 30px 0 16px;
+      padding-left: 12px;
+      border-left: 4px solid #7c6af7;
+    }
+
+    /* 阶段卡片 */
+    .phase { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 12px; margin-bottom: 16px; overflow: hidden; }
+    .phase-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 16px 20px; cursor: pointer;
+      background: #1e1e35;
+      transition: background 0.2s;
+    }
+    .phase-header:hover { background: #252545; }
+    .phase-num {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: #7c6af7; color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: bold; font-size: 0.9rem; flex-shrink: 0;
+    }
+    .phase-title { flex: 1; font-size: 1.05rem; font-weight: bold; }
+    .phase-badge {
+      font-size: 0.75rem; padding: 3px 10px; border-radius: 20px;
+      background: #2a2a4a; color: #888;
+    }
+    .phase-badge.active { background: #3d2fa0; color: #a78bfa; }
+    .phase-badge.done { background: #1a3a2a; color: #4ade80; }
+    .phase-arrow { color: #555; transition: transform 0.3s; }
+    .phase-arrow.open { transform: rotate(90deg); }
+
+    .phase-body { display: none; padding: 16px 20px; border-top: 1px solid #2a2a4a; }
+    .phase-body.open { display: block; }
+
+    /* 任务列表 */
+    .task-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 10px 0; border-bottom: 1px solid #1e1e35;
+    }
+    .task-item:last-child { border-bottom: none; }
+    .task-check {
+      width: 20px; height: 20px; border-radius: 4px;
+      border: 2px solid #3a3a5a; background: transparent;
+      cursor: pointer; flex-shrink: 0; margin-top: 2px;
+      appearance: none; -webkit-appearance: none;
+      transition: all 0.2s;
+    }
+    .task-check:checked {
+      background: #7c6af7; border-color: #7c6af7;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.485 1.431a1.473 1.473 0 0 0-2.084 0l-6.272 6.272-2.272-2.272a1.473 1.473 0 0 0-2.084 2.084l3.314 3.314a1.473 1.473 0 0 0 2.084 0l7.314-7.314a1.473 1.473 0 0 0 0-2.084z'/%3E%3C/svg%3E");
+      background-size: 12px; background-repeat: no-repeat; background-position: center;
+    }
+    .task-text { flex: 1; line-height: 1.5; }
+    .task-text.checked { text-decoration: line-through; color: #555; }
+    .task-tag {
+      font-size: 0.7rem; padding: 2px 8px; border-radius: 10px;
+      background: #2a2a4a; color: #7c6af7; white-space: nowrap; margin-top: 3px;
+    }
+    .task-link {
+      display: inline-block; margin-top: 4px; font-size: 0.75rem;
+      color: #a78bfa; text-decoration: none; padding: 2px 8px;
+      border: 1px solid #3a2a8a; border-radius: 6px;
+      transition: all 0.2s;
+    }
+    .task-link:hover { background: #3a2a8a; color: white; }
+
+    /* 资料卡片 */
+    .resource-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+    .resource-card {
+      background: #1e1e35; border: 1px solid #2a2a4a; border-radius: 10px;
+      padding: 16px; transition: all 0.3s; scroll-margin-top: 20px;
+    }
+    .resource-card:hover { border-color: #7c6af7; }
+    .resource-card:target {
+      border-color: #7c6af7; background: #252545;
+      animation: highlight 1s ease-in-out;
+    }
+    @keyframes highlight {
+      0%, 100% { box-shadow: 0 0 0 rgba(124, 106, 247, 0); }
+      50% { box-shadow: 0 0 20px rgba(124, 106, 247, 0.6); }
+    }
+    .resource-card .icon { font-size: 1.8rem; margin-bottom: 8px; }
+    .resource-card h4 { font-size: 0.95rem; color: #c4b5fd; margin-bottom: 6px; }
+    .resource-card p { font-size: 0.82rem; color: #777; line-height: 1.5; }
+    .resource-card a {
+      display: inline-block; margin-top: 10px;
+      font-size: 0.8rem; color: #7c6af7; text-decoration: none;
+      border: 1px solid #3a2a8a; padding: 4px 12px; border-radius: 6px;
+      transition: background 0.2s;
+    }
+    .resource-card a:hover { background: #3a2a8a; }
+
+    /* 打卡日历 */
+    .checkin-section { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 12px; padding: 20px; }
+    .checkin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .checkin-header h3 { color: #a78bfa; }
+    .checkin-btn {
+      background: #7c6af7; color: white; border: none;
+      padding: 8px 20px; border-radius: 8px; cursor: pointer;
+      font-size: 0.9rem; transition: background 0.2s;
+    }
+    .checkin-btn:hover { background: #6a58e0; }
+    .checkin-btn:disabled { background: #3a3a5a; color: #666; cursor: not-allowed; }
+    .calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+    .cal-day {
+      aspect-ratio: 1; border-radius: 6px; background: #2a2a4a;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; color: #555; cursor: default;
+    }
+    .cal-day.checked-in { background: #7c6af7; color: white; }
+    .cal-day.today { border: 2px solid #a78bfa; color: #a78bfa; }
+    .cal-day.today.checked-in { border-color: #4ade80; background: #7c6af7; color: white; }
+    .streak { text-align: center; margin-top: 14px; color: #888; font-size: 0.9rem; }
+    .streak span { color: #f59e0b; font-weight: bold; font-size: 1.1rem; }
+
+    /* 笔记区 */
+    .note-area {
+      width: 100%; min-height: 100px; background: #1e1e35;
+      border: 1px solid #2a2a4a; border-radius: 8px;
+      color: #e0e0e0; padding: 12px; font-size: 0.9rem;
+      font-family: inherit; resize: vertical; outline: none;
+      transition: border-color 0.2s;
+    }
+    .note-area:focus { border-color: #7c6af7; }
+    .save-note-btn {
+      margin-top: 8px; background: #2a2a4a; color: #a78bfa;
+      border: 1px solid #3a3a6a; padding: 6px 16px;
+      border-radius: 6px; cursor: pointer; font-size: 0.85rem;
+      transition: background 0.2s;
+    }
+    .save-note-btn:hover { background: #3a3a6a; }
+
+    footer { text-align: center; padding: 30px; color: #444; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🚀 AI & Kiro 学习计划</h1>
+  <p>从零开始，系统掌握 AI 工具与 Kiro 开发助手</p>
+</header>
+
+<div class="progress-bar-wrap">
+  <span>总进度</span>
+  <div class="progress-bar"><div class="progress-fill" id="totalProgress" style="width:0%"></div></div>
+  <span class="progress-pct" id="progressText">0%</span>
+</div>
+
+<div class="container">
+
+  <!-- 学习阶段 -->
+  <div class="section-title">📚 学习阶段</div>
+
+  <!-- 阶段1 -->
+  <div class="phase">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <div class="phase-num">1</div>
+      <div class="phase-title">AI 基础扫盲（第 1-2 周）</div>
+      <span class="phase-badge active">进行中</span>
+      <span class="phase-arrow">▶</span>
+    </div>
+    <div class="phase-body open">
+      <div class="task-item">
+        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
+        <div>
+          <div class="task-text">了解什么是 AI、大语言模型（LLM）是什么</div>
+          <span class="task-tag">概念</span>
+          <a href="#resource-ai-intro" class="task-link">📖 推荐：李宏毅机器学习</a>
+        </div>
+      </div>
+      <div class="task-item">
+        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
+        <div>
+          <div class="task-text">学会如何向 AI 提问（Prompt 技巧）</div>
+          <span class="task-tag">技能</span>
+          <a href="#resource-prompt" class="task-link">💬 推荐：Prompt 工程指南</a>
+        </div>
+      </div>
+      <div class="task-item">
+        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
+        <div>
+          <div class="task-text">体验 ChatGPT / Claude 基本对话</div>
+          <span class="task-tag">实践</span>
+          <a href="#resource-prompt" class="task-link">💬 推荐：Prompt 工程指南</a>
+        </div>
+      </div>
+      <div class="task-item">
+        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
+        <div>
+          <div class="task-text">了解 AI 的能力边界（能做什么、不能做什么）</div>
+          <span class="task-tag">概念</span>
+          <a href="#resource-ai-everyone" class="task-link">🎓 推荐：吴恩达 AI For Everyone</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 阶段2 -->
+  <div class="phase">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <div class="phase-num">2</div>
+      <div class="phase-title">Kiro 入门使用（第 2-3 周）</div>
+      <span class="phase-badge">待开始</span>
+      <span class="phase-arrow">▶</span>
+    </div>
+    <div class="phase-body">
+      <div class="task-item">
+        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
+        <div>
+          <div class="task-text">完成 Kiro 界面语言设置为中文</div>
+          <span class="task-tag">配置</span>
+          <a href="#resource-kiro-docs" class="task-link">🤖 推荐：Kiro 官方文档</a>
+        </div>
+      </div>
+      <div class="task-item">
+        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
+        <div>
+          <div class="task-text">学会在 Kiro 中用 Chat 模式提问和对话</div>
+          <span class="task-tag">技能</span>
+          <a href="#resource-kiro-docs" class="task-link">🤖 推荐：Kiro 官方文档</a>
+        </div>
+      </div>
+      <div class="task-item">
+        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
+        <div>
+          <div class="task-text">了解 Autopilot 和 Supervised 两种模式的区别</div>
+          <span class="task-tag">概念</span>
+          <a href="#resource-kiro-docs" class="task-link">🤖 推荐：Kiro 官方文档</a>
+        </div>
+      </div>
+      <div class="task-item">
+        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
+        <div>
+          <div class="task-text">用 Kiro 生成第一个代码文件（比如这个 HTML）</div>
+          <span class="task-tag">实践</span>
+          <a href="#resource-python" class="task-link">🐍 推荐：Python 基础教程</a>
+        </div>
+      </div>
+      <div class="task-item">
+        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
+        <div>
+          <div class="task-text">学会用 #File #Folder 给 Kiro 提供上下文</div>
+          <span class="task-tag">技能</span>
+          <a href="#resource-kiro-docs" class="task-link">🤖 推荐：Kiro 官方文档</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 阶段3 -->
+  <div class="phase">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <div class="phase-num">3</div>
+      <div class="phase-title">MCP 工具进阶（第 3-4 周）</div>
+      <span class="phase-badge">待开始</span>
+      <span class="phase-arrow">▶</span>
+    </div>
+    <div class="phase-body">
+      <div class="task-item">
+        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
+        <div>
+          <div class="task-text">理解 MCP 是什么，能扩展哪些能力</div>
+          <span class="task-tag">概念</span>
+          <a href="#resource-mcp" class="task-link">🛠️ 推荐：MCP 官方文档</a>
+        </div>
+      </div>
+      <div class="task-item">
+        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
+        <div>
+          <div class="task-text">确认所有 MCP 服务器连接正常（文件、时间、搜索等）</div>
+          <span class="task-tag">配置</span>
+          <a href="#resource-mcp" class="task-link">🛠️ 推荐：MCP 官方文档</a>
+        </div>
+      </div>
+      <div class="task-item">
+        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
+        <div>
+          <div class="task-text">用 Kiro + MCP 完成一次网页内容抓取任务</div>
+          <span class="task-tag">实践</span>
+          <a href="#resource-mcp" class="task-link">🛠️ 推荐：MCP 官方文档</a>
+        </div>
+      </div>
+      <div class="task-item">
+        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
+        <div>
+          <div class="task-text">用 Kiro + SQLite MCP 做一次简单数据查询</div>
+          <span class="task-tag">实践</span>
+          <a href="#resource-mcp" class="task-link">🛠️ 推荐：MCP 官方文档</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 阶段4 -->
+  <div class="phase">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <div class="phase-num">4</div>
+      <div class="phase-title">Spec 与 Hooks 高级功能（第 4-6 周）</div>
+      <span class="phase-badge">待开始</span>
+      <span class="phase-arrow">▶</span>
+    </div>
+    <div class="phase-body">
+      <div class="task-item">
+        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
+        <div>
+          <div class="task-text">学习 Spec 功能：用结构化方式描述需求让 Kiro 实现</div>
+          <span class="task-tag">技能</span>
+          <a href="#resource-kiro-docs" class="task-link">🤖 推荐：Kiro 官方文档</a>
+        </div>
+      </div>
+      <div class="task-item">
+        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
+        <div>
+          <div class="task-text">创建第一个 Hook（比如保存文件时自动检查代码）</div>
+          <span class="task-tag">实践</span>
+          <a href="#resource-kiro-docs" class="task-link">🤖 推荐：Kiro 官方文档</a>
+        </div>
+      </div>
+      <div class="task-item">
+        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
+        <div>
+          <div class="task-text">用 Steering 文件给 Kiro 设置项目规范</div>
+          <span class="task-tag">技能</span>
+          <a href="#resource-kiro-docs" class="task-link">🤖 推荐：Kiro 官方文档</a>
+        </div>
+      </div>
+      <div class="task-item">
+        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
+        <div>
+          <div class="task-text">完成一个完整的小项目（从需求到代码全程用 Kiro）</div>
+          <span class="task-tag">项目</span>
+          <a href="#resource-python" class="task-link">🐍 推荐：Python 基础教程</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 学习资料 -->
+  <div class="section-title">🔗 推荐学习资料</div>
+  <div class="resource-grid">
+    <div class="resource-card" id="resource-kiro-docs">
+      <div class="icon">🤖</div>
+      <h4>Kiro 官方文档</h4>
+      <p>Kiro 所有功能的官方说明，包括 Chat、Spec、Hooks、MCP 等</p>
+      <a href="https://kiro.dev/docs" target="_blank">前往查看 →</a>
+    </div>
+    <div class="resource-card" id="resource-ai-intro">
+      <div class="icon">📖</div>
+      <h4>AI 入门：李宏毅机器学习</h4>
+      <p>台大教授出品，中文讲解，从零理解 AI 和深度学习原理</p>
+      <a href="https://www.youtube.com/@HungyiLeeML" target="_blank">前往查看 →</a>
+    </div>
+    <div class="resource-card" id="resource-prompt">
+      <div class="icon">💬</div>
+      <h4>Prompt 工程指南</h4>
+      <p>学会如何写出高质量的 AI 提示词，让 AI 更好地理解你的需求</p>
+      <a href="https://www.promptingguide.ai/zh" target="_blank">前往查看 →</a>
+    </div>
+    <div class="resource-card" id="resource-mcp">
+      <div class="icon">🛠️</div>
+      <h4>MCP 官方文档</h4>
+      <p>了解 Model Context Protocol 的原理和如何配置各类服务器</p>
+      <a href="https://modelcontextprotocol.io" target="_blank">前往查看 →</a>
+    </div>
+    <div class="resource-card" id="resource-ai-everyone">
+      <div class="icon">🎓</div>
+      <h4>吴恩达 AI For Everyone</h4>
+      <p>面向非技术人员的 AI 课程，帮助理解 AI 在实际工作中的应用</p>
+      <a href="https://www.coursera.org/learn/ai-for-everyone" target="_blank">前往查看 →</a>
+    </div>
+    <div class="resource-card" id="resource-python">
+      <div class="icon">🐍</div>
+      <h4>Python 基础（菜鸟教程）</h4>
+      <p>中文 Python 入门教程，配合 Kiro 学习编程更高效</p>
+      <a href="https://www.runoob.com/python3/python3-tutorial.html" target="_blank">前往查看 →</a>
+    </div>
+  </div>
+
+  <!-- 打卡日历 -->
+  <div class="section-title">📅 学习打卡</div>
+  <div class="checkin-section">
+    <div class="checkin-header">
+      <h3 id="calTitle">本月打卡记录</h3>
+      <button class="checkin-btn" id="checkinBtn" onclick="doCheckin()">✅ 今日打卡</button>
+    </div>
+    <div class="calendar" id="calendar"></div>
+    <div class="streak">连续打卡 <span id="streakCount">0</span> 天 🔥</div>
+  </div>
+
+  <!-- 学习笔记 -->
+  <div class="section-title">📝 学习笔记</div>
+  <textarea class="note-area" id="noteArea" placeholder="记录今天学到了什么..."></textarea>
+  <br>
+  <button class="save-note-btn" onclick="saveNote()">💾 保存笔记</button>
+
+</div>
+
+<footer>坚持每天学一点，进步看得见 ✨</footer>
+
+<script>
+  // 折叠展开阶段
+  function togglePhase(header) {
+    const body = header.nextElementSibling;
+    const arrow = header.querySelector('.phase-arrow');
+    body.classList.toggle('open');
+    arrow.classList.toggle('open');
+  }
+
+  // 更新总进度
+  function updateProgress() {
+    const all = document.querySelectorAll('.task-check');
+    const checked = document.querySelectorAll('.task-check:checked');
+    const pct = Math.round((checked.length / all.length) * 100);
+    document.getElementById('totalProgress').style.width = pct + '%';
+    document.getElementById('progressText').textContent = pct + '%';
+    // 更新划线样式
+    all.forEach(cb => {
+      const text = cb.parentElement.querySelector('.task-text');
+      if (text) text.classList.toggle('checked', cb.checked);
+    });
+    saveChecks();
+  }
+
+  // 持久化任务勾选
+  function saveChecks() {
+    const all = document.querySelectorAll('.task-check');
+    const states = Array.from(all).map(cb => cb.checked);
+    localStorage.setItem('taskStates', JSON.stringify(states));
+  }
+  function loadChecks() {
+    const saved = localStorage.getItem('taskStates');
+    if (!saved) return;
+    const states = JSON.parse(saved);
+    const all = document.querySelectorAll('.task-check');
+    all.forEach((cb, i) => { if (states[i] !== undefined) cb.checked = states[i]; });
+    updateProgress();
+  }
+
+  // 打卡日历
+  function buildCalendar() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    document.getElementById('calTitle').textContent =
+      `${year}年${month + 1}月 打卡记录`;
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const today = now.getDate();
+    const checkins = JSON.parse(localStorage.getItem('checkins') || '{}');
+    const cal = document.getElementById('calendar');
+    cal.innerHTML = '';
+    // 星期标题
+    ['日','一','二','三','四','五','六'].forEach(d => {
+      const el = document.createElement('div');
+      el.className = 'cal-day';
+      el.style.cssText = 'background:transparent;color:#555;font-size:0.7rem;';
+      el.textContent = d;
+      cal.appendChild(el);
+    });
+    // 第一天是星期几
+    const firstDay = new Date(year, month, 1).getDay();
+    for (let i = 0; i < firstDay; i++) {
+      const el = document.createElement('div');
+      el.className = 'cal-day';
+      el.style.background = 'transparent';
+      cal.appendChild(el);
+    }
+    for (let d = 1; d <= daysInMonth; d++) {
+      const key = `${year}-${month+1}-${d}`;
+      const el = document.createElement('div');
+      el.className = 'cal-day';
+      if (checkins[key]) el.classList.add('checked-in');
+      if (d === today) el.classList.add('today');
+      el.textContent = d;
+      cal.appendChild(el);
+    }
+    // 连续打卡天数
+    let streak = 0;
+    for (let d = today; d >= 1; d--) {
+      const key = `${year}-${month+1}-${d}`;
+      if (checkins[key]) streak++;
+      else break;
+    }
+    document.getElementById('streakCount').textContent = streak;
+    // 今天是否已打卡
+    const todayKey = `${year}-${month+1}-${today}`;
+    const btn = document.getElementById('checkinBtn');
+    if (checkins[todayKey]) {
+      btn.textContent = '✅ 今日已打卡';
+      btn.disabled = true;
+    }
+  }
+
+  function doCheckin() {
+    const now = new Date();
+    const key = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`;
+    const checkins = JSON.parse(localStorage.getItem('checkins') || '{}');
+    checkins[key] = true;
+    localStorage.setItem('checkins', JSON.stringify(checkins));
+    buildCalendar();
+  }
+
+  // 笔记
+  function saveNote() {
+    const val = document.getElementById('noteArea').value;
+    localStorage.setItem('studyNote', val);
+    const btn = document.querySelector('.save-note-btn');
+    btn.textContent = '✅ 已保存';
+    setTimeout(() => btn.textContent = '💾 保存笔记', 1500);
+  }
+  function loadNote() {
+    const saved = localStorage.getItem('studyNote');
+    if (saved) document.getElementById('noteArea').value = saved;
+  }
+
+  // 初始化
+  loadChecks();
+  buildCalendar();
+  loadNote();
+</script>
+</body>
+</html>
