@@ -474,109 +474,30 @@ const RESOURCES = [
 ];
 
 // ============================================================
-// STATE — Supabase cloud sync + localStorage fallback
+// STATE — localStorage only (no cloud sync)
 // ============================================================
-const SUPABASE_URL = 'https://cddowglehgzggxkotxpr.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_mKG4Yfsa6YaLRXfz7VIwhw_MucMaGF9';
-const TABLE = 'progress';
-const ROW_ID = 'default';
-const LOCAL_KEY = 'ai-skill-forge-v2';
+const LOCAL_KEY = 'aaron-ai-learning-progress';
 
 let STATE = {completed:{}, log:[], weeklyMinutes:{}, notes:{}};
-let syncStatus = 'idle'; // idle | syncing | synced | offline
 let darkMode = true; // default dark mode
-let saveTimeout;
 
-async function supaFetch(method, body){
-  const url = `${SUPABASE_URL}/rest/v1/${TABLE}?id=eq.${ROW_ID}`;
-  const headers = {
-    'apikey': SUPABASE_KEY,
-    'Authorization': `Bearer ${SUPABASE_KEY}`,
-    'Content-Type': 'application/json',
-    'Prefer': method === 'POST' ? 'resolution=merge-duplicates' : undefined
-  };
-  Object.keys(headers).forEach(k => headers[k] === undefined && delete headers[k]);
-  const opts = {method, headers};
-  if(body) opts.body = JSON.stringify(body);
-  return fetch(method === 'POST' ? `${SUPABASE_URL}/rest/v1/${TABLE}` : url, opts);
-}
-
-async function loadState(){
-  // 1. Always load localStorage first (instant)
+function loadState(){
+  // Load from localStorage
   try {
     const local = localStorage.getItem(LOCAL_KEY);
     if(local) STATE = JSON.parse(local);
-  } catch(e){}
-
-  // 2. Then try cloud sync
-  try {
-    syncStatus = 'syncing'; updateSyncBadge();
-    const res = await supaFetch('GET');
-    if(res.ok){
-      const rows = await res.json();
-      if(rows.length > 0 && rows[0].state){
-        const cloud = rows[0].state;
-        // Merge: cloud wins if it has more completed lessons
-        const cloudDone = Object.keys(cloud.completed || {}).length;
-        const localDone = Object.keys(STATE.completed || {}).length;
-        if(cloudDone >= localDone){
-          STATE = cloud;
-          // Ensure notes property exists
-          if(!STATE.notes) STATE.notes = {};
-          localStorage.setItem(LOCAL_KEY, JSON.stringify(STATE));
-        } else {
-          // Local is ahead, push to cloud
-          await pushToCloud();
-        }
-      } else {
-        // No cloud data yet, push local
-        await pushToCloud();
-      }
-      syncStatus = 'synced';
-    } else {
-      syncStatus = 'offline';
-    }
   } catch(e){
-    console.log('Cloud sync unavailable, using local', e);
-    syncStatus = 'offline';
+    console.log('Failed to load state', e);
   }
-  updateSyncBadge();
 }
 
-async function pushToCloud(){
-  try {
-    await supaFetch('POST', {id: ROW_ID, state: STATE, updated_at: new Date().toISOString()});
-  } catch(e){ console.log('Cloud push failed', e); }
-}
-
-async function saveState(){
-  // Always save locally (instant)
-  try { localStorage.setItem(LOCAL_KEY, JSON.stringify(STATE)); } catch(e){}
-
-  // Debounce cloud save (avoid hammering on rapid clicks)
-  clearTimeout(saveTimeout);
-  saveTimeout = setTimeout(async () => {
-    try {
-      syncStatus = 'syncing'; updateSyncBadge();
-      await pushToCloud();
-      syncStatus = 'synced'; updateSyncBadge();
-    } catch(e){
-      syncStatus = 'offline'; updateSyncBadge();
-    }
-  }, 800);
-}
-
-function updateSyncBadge(){
-  const el = document.getElementById('sync-status');
-  if(!el) return;
-  const map = {
-    idle: '⏳',
-    syncing: '🔄 Syncing...',
-    synced: '☁️ Synced 已同步',
-    offline: '📴 Offline 离线'
-  };
-  el.textContent = map[syncStatus] || '';
-  el.className = 'sync-badge ' + syncStatus;
+function saveState(){
+  // Save to localStorage only
+  try { 
+    localStorage.setItem(LOCAL_KEY, JSON.stringify(STATE)); 
+  } catch(e){
+    console.log('Failed to save state', e);
+  }
 }
 
 // Export/Import still available as backup
@@ -638,7 +559,6 @@ function render(){
       <div class="stat c4"><div class="val">W${getCurrentWeek()}</div><div class="lbl">Current 📍</div></div>
     </div>
     <div class="sync-bar">
-      <span id="sync-status" class="sync-badge ${syncStatus}">${{idle:'⏳',syncing:'🔄 Syncing...',synced:'☁️ Synced 已同步',offline:'📴 Offline 离线'}[syncStatus]||''}</span>
       <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark/light mode">${darkMode?'☀️':'🌙'}</button>
       <button class="sync-btn" onclick="exportProgress()">📤 Export 导出</button>
       <button class="sync-btn" onclick="importProgress()">📥 Import 导入</button>
@@ -757,14 +677,14 @@ function saveNote(lessonId, note){
 }
 
 // INIT
-(async()=>{
+(()=>{
   // Load theme preference
   const savedTheme = localStorage.getItem('theme');
   if(savedTheme === 'light'){
     darkMode = false;
     document.documentElement.classList.add('light');
   }
-  await loadState();
+  loadState();
   render();
 })();
 </script>
