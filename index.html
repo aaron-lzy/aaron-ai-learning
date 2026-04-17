@@ -1,557 +1,772 @@
+<!-- Updated via Kiro -->
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI & Kiro 学习计划</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Microsoft YaHei', sans-serif; background: #0f0f1a; color: #e0e0e0; min-height: 100vh; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Skill Forge for Aaron</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Geist+Mono:wght@400;600&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#09090b;--s1:#131316;--s2:#1c1c21;--s3:#27272d;
+  --border:#2a2a32;--text:#ececef;--dim:#71717a;--dim2:#52525b;
+  --orange:#f97316;--orange-g:rgba(249,115,22,.12);
+  --emerald:#10b981;--emerald-g:rgba(16,185,129,.12);
+  --sky:#38bdf8;--sky-g:rgba(56,189,248,.12);
+  --violet:#a78bfa;--violet-g:rgba(167,139,250,.12);
+  --amber:#fbbf24;--amber-g:rgba(251,191,36,.12);
+  --rose:#fb7185;--rose-g:rgba(251,113,133,.12);
+  --radius:14px;
+}
+:root.light{
+  --bg:#ffffff;--s1:#f5f5f5;--s2:#e5e5e5;--s3:#d4d4d4;
+  --border:#d4d4d8;--text:#18181b;--dim:#52525b;--dim2:#71717a;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+.app{max-width:1000px;margin:0 auto;padding:20px 16px 80px}
 
-    header {
-      background: linear-gradient(135deg, #1a1a2e, #16213e);
-      padding: 40px 20px;
-      text-align: center;
-      border-bottom: 1px solid #2a2a4a;
-    }
-    header h1 { font-size: 2.2rem; color: #7c6af7; margin-bottom: 8px; }
-    header p { color: #888; font-size: 1rem; }
+.hero{text-align:center;padding:40px 0 28px;position:relative}
+.hero::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:120px;height:1px;background:linear-gradient(90deg,transparent,var(--orange),transparent)}
+.hero h1{font-family:'Instrument Serif',serif;font-size:clamp(30px,6vw,46px);font-weight:400;letter-spacing:-.5px;line-height:1.1}
+.hero h1 span{background:linear-gradient(135deg,var(--orange),#fb923c,var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero .sub{color:var(--dim);font-size:14px;margin-top:8px}
+.hero .sub-cn{color:var(--dim2);font-size:13px;font-style:italic;margin-top:2px}
 
-    .progress-bar-wrap {
-      background: #1a1a2e;
-      padding: 20px 40px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      border-bottom: 1px solid #2a2a4a;
-    }
-    .progress-bar-wrap span { color: #7c6af7; font-weight: bold; white-space: nowrap; }
-    .progress-bar { flex: 1; height: 10px; background: #2a2a4a; border-radius: 10px; overflow: hidden; }
-    .progress-fill { height: 100%; background: linear-gradient(90deg, #7c6af7, #a78bfa); border-radius: 10px; transition: width 0.5s; }
-    .progress-pct { color: #a78bfa; font-weight: bold; white-space: nowrap; }
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:24px 0 20px}
+.stat{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:14px 10px;text-align:center}
+.stat .val{font-family:'Geist Mono',monospace;font-size:22px;font-weight:600}
+.stat .lbl{font-size:11px;color:var(--dim);margin-top:2px}
+.stat.c1 .val{color:var(--orange)}.stat.c2 .val{color:var(--emerald)}.stat.c3 .val{color:var(--sky)}.stat.c4 .val{color:var(--violet)}
 
-    .container { max-width: 960px; margin: 0 auto; padding: 30px 20px; }
+.tabs{display:flex;gap:2px;background:var(--s1);border-radius:12px;padding:3px;margin-bottom:24px;overflow-x:auto}
+.tab-btn{flex:1;padding:10px 6px;border:none;background:none;color:var(--dim);font-size:13px;font-weight:600;border-radius:10px;cursor:pointer;transition:.2s;white-space:nowrap;font-family:inherit}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.on{background:var(--s2);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.panel{display:none}.panel.on{display:block}
 
-    .section-title {
-      font-size: 1.3rem;
-      color: #a78bfa;
-      margin: 30px 0 16px;
-      padding-left: 12px;
-      border-left: 4px solid #7c6af7;
-    }
+/* Philosophy banner */
+.philosophy{background:var(--s1);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:24px;position:relative;overflow:hidden}
+.philosophy::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--orange)}
+.philosophy h3{font-size:14px;font-weight:700;margin-bottom:6px;color:var(--orange)}
+.philosophy p{font-size:13px;color:var(--dim);line-height:1.6}
+.philosophy .highlight{color:var(--text);font-weight:500}
 
-    /* 阶段卡片 */
-    .phase { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 12px; margin-bottom: 16px; overflow: hidden; }
-    .phase-header {
-      display: flex; align-items: center; gap: 12px;
-      padding: 16px 20px; cursor: pointer;
-      background: #1e1e35;
-      transition: background 0.2s;
-    }
-    .phase-header:hover { background: #252545; }
-    .phase-num {
-      width: 32px; height: 32px; border-radius: 50%;
-      background: #7c6af7; color: white;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: bold; font-size: 0.9rem; flex-shrink: 0;
-    }
-    .phase-title { flex: 1; font-size: 1.05rem; font-weight: bold; }
-    .phase-badge {
-      font-size: 0.75rem; padding: 3px 10px; border-radius: 20px;
-      background: #2a2a4a; color: #888;
-    }
-    .phase-badge.active { background: #3d2fa0; color: #a78bfa; }
-    .phase-badge.done { background: #1a3a2a; color: #4ade80; }
-    .phase-arrow { color: #555; transition: transform 0.3s; }
-    .phase-arrow.open { transform: rotate(90deg); }
+/* Phase */
+.phase{margin-bottom:28px}
+.phase-head{display:flex;align-items:center;gap:12px;margin-bottom:6px;flex-wrap:wrap}
+.phase-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.phase-name{font-family:'Geist Mono',monospace;font-size:15px;font-weight:600;flex:1;min-width:0}
+.phase-badge{font-size:10px;padding:3px 10px;border-radius:20px;font-weight:700;letter-spacing:.5px}
+.p1 .phase-dot{background:var(--emerald)}.p1 .phase-badge{background:var(--emerald-g);color:var(--emerald)}
+.p2 .phase-dot{background:var(--sky)}.p2 .phase-badge{background:var(--sky-g);color:var(--sky)}
+.p3 .phase-dot{background:var(--violet)}.p3 .phase-badge{background:var(--violet-g);color:var(--violet)}
+.p4 .phase-dot{background:var(--amber)}.p4 .phase-badge{background:var(--amber-g);color:var(--amber)}
+.phase-desc{font-size:13px;color:var(--dim);margin:0 0 14px 22px;line-height:1.5}
 
-    .phase-body { display: none; padding: 16px 20px; border-top: 1px solid #2a2a4a; }
-    .phase-body.open { display: block; }
+.week-group{margin-bottom:16px}
+.week-lbl{font-size:11px;font-weight:700;color:var(--dim2);text-transform:uppercase;letter-spacing:1.2px;margin:0 0 6px 34px}
 
-    /* 任务列表 */
-    .task-item {
-      display: flex; align-items: flex-start; gap: 12px;
-      padding: 10px 0; border-bottom: 1px solid #1e1e35;
-    }
-    .task-item:last-child { border-bottom: none; }
-    .task-check {
-      width: 20px; height: 20px; border-radius: 4px;
-      border: 2px solid #3a3a5a; background: transparent;
-      cursor: pointer; flex-shrink: 0; margin-top: 2px;
-      appearance: none; -webkit-appearance: none;
-      transition: all 0.2s;
-    }
-    .task-check:checked {
-      background: #7c6af7; border-color: #7c6af7;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.485 1.431a1.473 1.473 0 0 0-2.084 0l-6.272 6.272-2.272-2.272a1.473 1.473 0 0 0-2.084 2.084l3.314 3.314a1.473 1.473 0 0 0 2.084 0l7.314-7.314a1.473 1.473 0 0 0 0-2.084z'/%3E%3C/svg%3E");
-      background-size: 12px; background-repeat: no-repeat; background-position: center;
-    }
-    .task-text { flex: 1; line-height: 1.5; }
-    .task-text.checked { text-decoration: line-through; color: #555; }
-    .task-tag {
-      font-size: 0.7rem; padding: 2px 8px; border-radius: 10px;
-      background: #2a2a4a; color: #7c6af7; white-space: nowrap; margin-top: 3px;
-    }
-    .task-link {
-      display: inline-block; margin-top: 4px; font-size: 0.75rem;
-      color: #a78bfa; text-decoration: none; padding: 2px 8px;
-      border: 1px solid #3a2a8a; border-radius: 6px;
-      transition: all 0.2s;
-    }
-    .task-link:hover { background: #3a2a8a; color: white; }
+.lesson{display:flex;align-items:flex-start;gap:10px;padding:9px 10px;border-radius:10px;transition:background .15s}
+.lesson:hover{background:var(--s1)}
+.chk{width:22px;height:22px;border-radius:7px;border:2px solid var(--border);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:.2s;background:none;margin-top:1px;font-size:0}
+.chk.done{border-color:var(--emerald);background:var(--emerald)}
+.chk.done::after{content:'✓';color:#fff;font-size:12px;font-weight:700}
+.lesson-body{flex:1;min-width:0}
+.lesson-t{font-size:14px;font-weight:500;line-height:1.35}
+.lesson-t.struck{text-decoration:line-through;opacity:.45}
+.lesson-d{font-size:12px;color:var(--dim);margin-top:2px;line-height:1.45}
+.lesson-scenario{font-size:12px;color:var(--sky);margin-top:3px;font-style:italic}
+.lesson-tags{display:flex;gap:5px;margin-top:5px;flex-wrap:wrap;align-items:center}
+.t{font-size:10px;padding:2px 7px;border-radius:12px;font-weight:700;letter-spacing:.3px}
+.t-wknd{background:var(--orange-g);color:var(--orange)}
+.t-wkdy{background:var(--emerald-g);color:var(--emerald)}
+.t-work{background:var(--sky-g);color:var(--sky)}
+.t-mac{background:var(--violet-g);color:var(--violet)}
+.t-proj{background:var(--amber-g);color:var(--amber)}
+.t-amz{background:var(--rose-g);color:var(--rose)}
+.time-est{font-size:11px;color:var(--dim2);font-family:'Geist Mono',monospace;margin-left:auto;white-space:nowrap;padding-top:2px;flex-shrink:0}
 
-    /* 资料卡片 */
-    .resource-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
-    .resource-card {
-      background: #1e1e35; border: 1px solid #2a2a4a; border-radius: 10px;
-      padding: 16px; transition: all 0.3s; scroll-margin-top: 20px;
-    }
-    .resource-card:hover { border-color: #7c6af7; }
-    .resource-card:target {
-      border-color: #7c6af7; background: #252545;
-      animation: highlight 1s ease-in-out;
-    }
-    @keyframes highlight {
-      0%, 100% { box-shadow: 0 0 0 rgba(124, 106, 247, 0); }
-      50% { box-shadow: 0 0 20px rgba(124, 106, 247, 0.6); }
-    }
-    .resource-card .icon { font-size: 1.8rem; margin-bottom: 8px; }
-    .resource-card h4 { font-size: 0.95rem; color: #c4b5fd; margin-bottom: 6px; }
-    .resource-card p { font-size: 0.82rem; color: #777; line-height: 1.5; }
-    .resource-card a {
-      display: inline-block; margin-top: 10px;
-      font-size: 0.8rem; color: #7c6af7; text-decoration: none;
-      border: 1px solid #3a2a8a; padding: 4px 12px; border-radius: 6px;
-      transition: background 0.2s;
-    }
-    .resource-card a:hover { background: #3a2a8a; }
+/* Resource links inline */
+.lesson-links{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.res-link{font-size:11px;color:var(--orange);background:var(--orange-g);padding:3px 9px;border-radius:8px;text-decoration:none;cursor:pointer;transition:.2s;border:none;font-family:inherit;display:inline-flex;align-items:center;gap:3px}
+.res-link:hover{background:rgba(249,115,22,.3);color:#fff}
+.res-link::before{content:'🔗';font-size:9px}
 
-    /* 打卡日历 */
-    .checkin-section { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 12px; padding: 20px; }
-    .checkin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-    .checkin-header h3 { color: #a78bfa; }
-    .checkin-btn {
-      background: #7c6af7; color: white; border: none;
-      padding: 8px 20px; border-radius: 8px; cursor: pointer;
-      font-size: 0.9rem; transition: background 0.2s;
-    }
-    .checkin-btn:hover { background: #6a58e0; }
-    .checkin-btn:disabled { background: #3a3a5a; color: #666; cursor: not-allowed; }
-    .calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
-    .cal-day {
-      aspect-ratio: 1; border-radius: 6px; background: #2a2a4a;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.75rem; color: #555; cursor: default;
-    }
-    .cal-day.checked-in { background: #7c6af7; color: white; }
-    .cal-day.today { border: 2px solid #a78bfa; color: #a78bfa; }
-    .cal-day.today.checked-in { border-color: #4ade80; background: #7c6af7; color: white; }
-    .streak { text-align: center; margin-top: 14px; color: #888; font-size: 0.9rem; }
-    .streak span { color: #f59e0b; font-weight: bold; font-size: 1.1rem; }
+/* Progress tab */
+.ring-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-bottom:24px}
+.ring-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;align-items:center;gap:14px}
+.ring-card svg{width:56px;height:56px;flex-shrink:0}
+.r-title{font-size:13px;font-weight:600}
+.r-sub{font-size:12px;color:var(--dim)}
 
-    /* 笔记区 */
-    .note-area {
-      width: 100%; min-height: 100px; background: #1e1e35;
-      border: 1px solid #2a2a4a; border-radius: 8px;
-      color: #e0e0e0; padding: 12px; font-size: 0.9rem;
-      font-family: inherit; resize: vertical; outline: none;
-      transition: border-color 0.2s;
-    }
-    .note-area:focus { border-color: #7c6af7; }
-    .save-note-btn {
-      margin-top: 8px; background: #2a2a4a; color: #a78bfa;
-      border: 1px solid #3a3a6a; padding: 6px 16px;
-      border-radius: 6px; cursor: pointer; font-size: 0.85rem;
-      transition: background 0.2s;
-    }
-    .save-note-btn:hover { background: #3a3a6a; }
+.heat-section{background:var(--s1);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+.heat-title{font-size:14px;font-weight:600;margin-bottom:2px}
+.heat-sub{font-size:12px;color:var(--dim);margin-bottom:12px}
+.heat-grid{display:flex;flex-wrap:wrap;gap:3px}
+.hc{width:16px;height:16px;border-radius:3px;background:var(--s2)}
+.hc.l1{background:rgba(249,115,22,.2)}.hc.l2{background:rgba(249,115,22,.4)}.hc.l3{background:rgba(249,115,22,.65)}.hc.l4{background:var(--orange)}
 
-    footer { text-align: center; padding: 30px; color: #444; font-size: 0.85rem; }
-  </style>
+.log-section{background:var(--s1);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.log-title{font-size:14px;font-weight:600;margin-bottom:12px}
+.log-entry{padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;display:flex;gap:10px}
+.log-entry:last-child{border:none}
+.log-date{color:var(--dim);font-family:'Geist Mono',monospace;font-size:12px;flex-shrink:0}
+
+/* Practice */
+.drill{background:var(--s1);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:14px}
+.drill h3{font-size:15px;font-weight:600;margin-bottom:1px}
+.drill-cn{font-size:12px;color:var(--dim);margin-bottom:6px}
+.drill-diff{font-size:10px;padding:2px 8px;border-radius:10px;display:inline-block;font-weight:700;margin-bottom:8px}
+.drill-diff.easy{background:var(--emerald-g);color:var(--emerald)}
+.drill-diff.med{background:var(--amber-g);color:var(--amber)}
+.drill-diff.hard{background:var(--violet-g);color:var(--violet)}
+.drill p{font-size:13px;color:var(--dim);margin-bottom:10px;line-height:1.5}
+.drill ol{font-size:13px;padding-left:20px;line-height:1.7}
+.drill .tused{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
+.drill .tt{font-size:10px;background:var(--s3);padding:2px 8px;border-radius:6px;color:var(--dim)}
+
+/* Resources */
+.res-group{margin-bottom:22px}
+.res-group h3{font-size:12px;text-transform:uppercase;letter-spacing:1.2px;color:var(--dim);margin-bottom:10px;font-weight:700}
+.res-item{padding:12px 14px;background:var(--s1);border:1px solid var(--border);border-radius:12px;margin-bottom:8px}
+.res-item-head{display:flex;align-items:center;gap:10px}
+.res-icon{font-size:18px;flex-shrink:0}
+.res-name{font-size:14px;font-weight:500}
+.res-desc{font-size:12px;color:var(--dim);margin-top:2px;margin-left:28px}
+.res-why{font-size:11px;color:var(--orange);margin-top:3px;margin-left:28px}
+
+/* Tooltip style for links */
+.link-url{font-size:11px;color:var(--sky);word-break:break-all;margin-left:28px;margin-top:2px;text-decoration:none;transition:.2s}
+.link-url:hover{color:var(--text);text-decoration:underline}
+
+@media(max-width:600px){
+  .stats-bar{grid-template-columns:repeat(2,1fr)}
+  .time-est{display:none}
+  .lesson{padding:8px 4px}
+}
+
+.sync-bar{display:flex;gap:8px;justify-content:center;align-items:center;margin-bottom:20px;flex-wrap:wrap}
+.sync-btn{font-size:12px;padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:var(--s1);color:var(--dim);cursor:pointer;font-family:inherit;transition:.2s;display:flex;align-items:center;gap:5px}
+.sync-btn:hover{border-color:var(--orange);color:var(--text)}
+.reset-btn{border-color:var(--rose) !important;color:var(--rose) !important}
+.reset-btn:hover{background:var(--rose-g) !important}
+.sync-badge{font-size:11px;padding:4px 10px;border-radius:20px;font-weight:600;letter-spacing:.3px}
+.sync-badge.synced{background:var(--emerald-g);color:var(--emerald)}
+.sync-badge.syncing{background:var(--amber-g);color:var(--amber)}
+.sync-badge.offline{background:var(--rose-g);color:var(--rose)}
+.sync-badge.idle{background:var(--s2);color:var(--dim)}
+.theme-toggle{font-size:20px;padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:var(--s1);cursor:pointer;font-family:inherit;transition:.2s}
+.theme-toggle:hover{border-color:var(--orange)}
+.lesson-notes{margin-top:8px;width:100%;min-height:60px;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--s2);color:var(--text);font-family:inherit;font-size:12px;resize:vertical;transition:.2s}
+.lesson-notes:focus{outline:none;border-color:var(--orange);background:var(--s1)}
+.lesson-notes::placeholder{color:var(--dim2)}
+</style>
 </head>
 <body>
-
-<header>
-  <h1>🚀 AI & Kiro 学习计划</h1>
-  <p>从零开始，系统掌握 AI 工具与 Kiro 开发助手</p>
-</header>
-
-<div class="progress-bar-wrap">
-  <span>总进度</span>
-  <div class="progress-bar"><div class="progress-fill" id="totalProgress" style="width:0%"></div></div>
-  <span class="progress-pct" id="progressText">0%</span>
-</div>
-
-<div class="container">
-
-  <!-- 学习阶段 -->
-  <div class="section-title">📚 学习阶段</div>
-
-  <!-- 阶段1 -->
-  <div class="phase">
-    <div class="phase-header" onclick="togglePhase(this)">
-      <div class="phase-num">1</div>
-      <div class="phase-title">AI 基础扫盲（第 1-2 周）</div>
-      <span class="phase-badge active">进行中</span>
-      <span class="phase-arrow">▶</span>
-    </div>
-    <div class="phase-body open">
-      <div class="task-item">
-        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
-        <div>
-          <div class="task-text">了解什么是 AI、大语言模型（LLM）是什么</div>
-          <span class="task-tag">概念</span>
-          <a href="#resource-ai-intro" class="task-link">📖 推荐：李宏毅机器学习</a>
-        </div>
-      </div>
-      <div class="task-item">
-        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
-        <div>
-          <div class="task-text">学会如何向 AI 提问（Prompt 技巧）</div>
-          <span class="task-tag">技能</span>
-          <a href="#resource-prompt" class="task-link">💬 推荐：Prompt 工程指南</a>
-        </div>
-      </div>
-      <div class="task-item">
-        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
-        <div>
-          <div class="task-text">体验 ChatGPT / Claude 基本对话</div>
-          <span class="task-tag">实践</span>
-          <a href="#resource-prompt" class="task-link">💬 推荐：Prompt 工程指南</a>
-        </div>
-      </div>
-      <div class="task-item">
-        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
-        <div>
-          <div class="task-text">了解 AI 的能力边界（能做什么、不能做什么）</div>
-          <span class="task-tag">概念</span>
-          <a href="#resource-ai-everyone" class="task-link">🎓 推荐：吴恩达 AI For Everyone</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 阶段2 -->
-  <div class="phase">
-    <div class="phase-header" onclick="togglePhase(this)">
-      <div class="phase-num">2</div>
-      <div class="phase-title">Kiro 入门使用（第 2-3 周）</div>
-      <span class="phase-badge">待开始</span>
-      <span class="phase-arrow">▶</span>
-    </div>
-    <div class="phase-body">
-      <div class="task-item">
-        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
-        <div>
-          <div class="task-text">完成 Kiro 界面语言设置为中文</div>
-          <span class="task-tag">配置</span>
-          <a href="#resource-kiro-docs" class="task-link">🤖 推荐：Kiro 官方文档</a>
-        </div>
-      </div>
-      <div class="task-item">
-        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
-        <div>
-          <div class="task-text">学会在 Kiro 中用 Chat 模式提问和对话</div>
-          <span class="task-tag">技能</span>
-          <a href="#resource-kiro-docs" class="task-link">🤖 推荐：Kiro 官方文档</a>
-        </div>
-      </div>
-      <div class="task-item">
-        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
-        <div>
-          <div class="task-text">了解 Autopilot 和 Supervised 两种模式的区别</div>
-          <span class="task-tag">概念</span>
-          <a href="#resource-kiro-docs" class="task-link">🤖 推荐：Kiro 官方文档</a>
-        </div>
-      </div>
-      <div class="task-item">
-        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
-        <div>
-          <div class="task-text">用 Kiro 生成第一个代码文件（比如这个 HTML）</div>
-          <span class="task-tag">实践</span>
-          <a href="#resource-python" class="task-link">🐍 推荐：Python 基础教程</a>
-        </div>
-      </div>
-      <div class="task-item">
-        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
-        <div>
-          <div class="task-text">学会用 #File #Folder 给 Kiro 提供上下文</div>
-          <span class="task-tag">技能</span>
-          <a href="#resource-kiro-docs" class="task-link">🤖 推荐：Kiro 官方文档</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 阶段3 -->
-  <div class="phase">
-    <div class="phase-header" onclick="togglePhase(this)">
-      <div class="phase-num">3</div>
-      <div class="phase-title">MCP 工具进阶（第 3-4 周）</div>
-      <span class="phase-badge">待开始</span>
-      <span class="phase-arrow">▶</span>
-    </div>
-    <div class="phase-body">
-      <div class="task-item">
-        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
-        <div>
-          <div class="task-text">理解 MCP 是什么，能扩展哪些能力</div>
-          <span class="task-tag">概念</span>
-          <a href="#resource-mcp" class="task-link">🛠️ 推荐：MCP 官方文档</a>
-        </div>
-      </div>
-      <div class="task-item">
-        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
-        <div>
-          <div class="task-text">确认所有 MCP 服务器连接正常（文件、时间、搜索等）</div>
-          <span class="task-tag">配置</span>
-          <a href="#resource-mcp" class="task-link">🛠️ 推荐：MCP 官方文档</a>
-        </div>
-      </div>
-      <div class="task-item">
-        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
-        <div>
-          <div class="task-text">用 Kiro + MCP 完成一次网页内容抓取任务</div>
-          <span class="task-tag">实践</span>
-          <a href="#resource-mcp" class="task-link">🛠️ 推荐：MCP 官方文档</a>
-        </div>
-      </div>
-      <div class="task-item">
-        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
-        <div>
-          <div class="task-text">用 Kiro + SQLite MCP 做一次简单数据查询</div>
-          <span class="task-tag">实践</span>
-          <a href="#resource-mcp" class="task-link">🛠️ 推荐：MCP 官方文档</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 阶段4 -->
-  <div class="phase">
-    <div class="phase-header" onclick="togglePhase(this)">
-      <div class="phase-num">4</div>
-      <div class="phase-title">Spec 与 Hooks 高级功能（第 4-6 周）</div>
-      <span class="phase-badge">待开始</span>
-      <span class="phase-arrow">▶</span>
-    </div>
-    <div class="phase-body">
-      <div class="task-item">
-        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
-        <div>
-          <div class="task-text">学习 Spec 功能：用结构化方式描述需求让 Kiro 实现</div>
-          <span class="task-tag">技能</span>
-          <a href="#resource-kiro-docs" class="task-link">🤖 推荐：Kiro 官方文档</a>
-        </div>
-      </div>
-      <div class="task-item">
-        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
-        <div>
-          <div class="task-text">创建第一个 Hook（比如保存文件时自动检查代码）</div>
-          <span class="task-tag">实践</span>
-          <a href="#resource-kiro-docs" class="task-link">🤖 推荐：Kiro 官方文档</a>
-        </div>
-      </div>
-      <div class="task-item">
-        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
-        <div>
-          <div class="task-text">用 Steering 文件给 Kiro 设置项目规范</div>
-          <span class="task-tag">技能</span>
-          <a href="#resource-kiro-docs" class="task-link">🤖 推荐：Kiro 官方文档</a>
-        </div>
-      </div>
-      <div class="task-item">
-        <input type="checkbox" class="task-check" onchange="updateProgress(this)">
-        <div>
-          <div class="task-text">完成一个完整的小项目（从需求到代码全程用 Kiro）</div>
-          <span class="task-tag">项目</span>
-          <a href="#resource-python" class="task-link">🐍 推荐：Python 基础教程</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 学习资料 -->
-  <div class="section-title">🔗 推荐学习资料</div>
-  <div class="resource-grid">
-    <div class="resource-card" id="resource-kiro-docs">
-      <div class="icon">🤖</div>
-      <h4>Kiro 官方文档</h4>
-      <p>Kiro 所有功能的官方说明，包括 Chat、Spec、Hooks、MCP 等</p>
-      <a href="https://kiro.dev/docs" target="_blank">前往查看 →</a>
-    </div>
-    <div class="resource-card" id="resource-ai-intro">
-      <div class="icon">📖</div>
-      <h4>AI 入门：李宏毅机器学习</h4>
-      <p>台大教授出品，中文讲解，从零理解 AI 和深度学习原理</p>
-      <a href="https://www.youtube.com/@HungyiLeeML" target="_blank">前往查看 →</a>
-    </div>
-    <div class="resource-card" id="resource-prompt">
-      <div class="icon">💬</div>
-      <h4>Prompt 工程指南</h4>
-      <p>学会如何写出高质量的 AI 提示词，让 AI 更好地理解你的需求</p>
-      <a href="https://www.promptingguide.ai/zh" target="_blank">前往查看 →</a>
-    </div>
-    <div class="resource-card" id="resource-mcp">
-      <div class="icon">🛠️</div>
-      <h4>MCP 官方文档</h4>
-      <p>了解 Model Context Protocol 的原理和如何配置各类服务器</p>
-      <a href="https://modelcontextprotocol.io" target="_blank">前往查看 →</a>
-    </div>
-    <div class="resource-card" id="resource-ai-everyone">
-      <div class="icon">🎓</div>
-      <h4>吴恩达 AI For Everyone</h4>
-      <p>面向非技术人员的 AI 课程，帮助理解 AI 在实际工作中的应用</p>
-      <a href="https://www.coursera.org/learn/ai-for-everyone" target="_blank">前往查看 →</a>
-    </div>
-    <div class="resource-card" id="resource-python">
-      <div class="icon">🐍</div>
-      <h4>Python 基础（菜鸟教程）</h4>
-      <p>中文 Python 入门教程，配合 Kiro 学习编程更高效</p>
-      <a href="https://www.runoob.com/python3/python3-tutorial.html" target="_blank">前往查看 →</a>
-    </div>
-  </div>
-
-  <!-- 打卡日历 -->
-  <div class="section-title">📅 学习打卡</div>
-  <div class="checkin-section">
-    <div class="checkin-header">
-      <h3 id="calTitle">本月打卡记录</h3>
-      <button class="checkin-btn" id="checkinBtn" onclick="doCheckin()">✅ 今日打卡</button>
-    </div>
-    <div class="calendar" id="calendar"></div>
-    <div class="streak">连续打卡 <span id="streakCount">0</span> 天 🔥</div>
-  </div>
-
-  <!-- 学习笔记 -->
-  <div class="section-title">📝 学习笔记</div>
-  <textarea class="note-area" id="noteArea" placeholder="记录今天学到了什么..."></textarea>
-  <br>
-  <button class="save-note-btn" onclick="saveNote()">💾 保存笔记</button>
-
-</div>
-
-<footer>坚持每天学一点，进步看得见 ✨</footer>
+<div class="app" id="app"></div>
 
 <script>
-  // 折叠展开阶段
-  function togglePhase(header) {
-    const body = header.nextElementSibling;
-    const arrow = header.querySelector('.phase-arrow');
-    body.classList.toggle('open');
-    arrow.classList.toggle('open');
+// ============================================================
+// CURRICULUM DATA
+// ============================================================
+const PHASES = [
+  {
+    id:'p1',cls:'p1',
+    name:'Phase 1 · Read & Verify 读懂AI输出',
+    badge:'WEEK 1–4',
+    desc:'You don\'t need to write code from scratch — you need to READ, VERIFY, and DEBUG what AI generates. This phase builds that literacy through your actual work scenarios. 你不需要从零写代码，你需要能看懂、验证和调试AI生成的代码。',
+    weeks:[
+      { label:'Week 1 — 用Kiro + Claude Code做第一个工作自动化', lessons:[
+        {id:'1-1',t:'Kiro环境配置 + Python运行测试',
+         d:'Configure Kiro on Mac. Run a hello-world Python script. Understand the terminal basics.',
+         scenario:'🎯 Goal: Get your dev environment ready in 30 min so you can vibe-code all weekend',
+         tags:['wknd','mac'],time:'1h',
+         links:[
+           {label:'Kiro Docs',url:'https://kiro.dev/docs'},
+           {label:'Python安装指南',url:'https://www.python.org/downloads/'}
+         ]},
+        {id:'1-2',t:'[实战] 用Vibe Coding自动化你的周报数据处理',
+         d:'Describe your weekly data task to Claude Code in Kiro → it generates Pandas script → you learn to READ the output and verify correctness.',
+         scenario:'🎯 Scenario: You get a CSV of seller adoption metrics every Monday. Automate the pivot/summary you do manually in Excel.',
+         tags:['wknd','mac','proj'],time:'2.5h',
+         links:[
+           {label:'Pandas 10min入门',url:'https://pandas.pydata.org/docs/user_guide/10min.html'},
+           {label:'Claude Code Docs',url:'https://docs.anthropic.com/en/docs/claude-code'}
+         ]},
+        {id:'1-3',t:'SQL基础复习: 能读懂QuickSight的查询逻辑',
+         d:'Review SELECT, JOIN, GROUP BY, HAVING. Focus on READING SQL, not writing from scratch — because QuickSight and Bedrock both generate SQL you need to verify.',
+         scenario:'🎯 Scenario: Your QuickSight dashboard shows wrong numbers. Can you read the calculated field SQL to find the bug?',
+         tags:['wkdy','work','amz'],time:'1h',
+         links:[
+           {label:'Mode SQL Tutorial',url:'https://mode.com/sql-tutorial'},
+           {label:'QuickSight计算字段文档',url:'https://docs.aws.amazon.com/quicksight/latest/user/adding-a-calculated-field.html'}
+         ]},
+      ]},
+      { label:'Week 2 — Prompt Engineering: 你的核心武器', lessons:[
+        {id:'2-1',t:'系统化Prompt Engineering方法论',
+         d:'Master: role prompting, few-shot examples, chain-of-thought, output formatting. Build a prompt template library for GTM use cases.',
+         scenario:'🎯 Scenario: Build prompt templates for — root cause analysis, competitive brief, seller objection handling, WBR narrative generation.',
+         tags:['wknd','mac'],time:'2h',
+         links:[
+           {label:'Anthropic Prompt Guide',url:'https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview'},
+           {label:'Prompt Engineering实战指南',url:'https://www.promptingguide.ai/'}
+         ]},
+        {id:'2-2',t:'Claude API基础 + 第一个批量处理脚本',
+         d:'Call Claude API from Python. Build a script that processes multiple data files with the same prompt — your first "AI pipeline".',
+         scenario:'🎯 Scenario: You have 15 seller feedback forms. Batch-analyze them for top themes and objections.',
+         tags:['wknd','mac'],time:'2h',
+         links:[
+           {label:'Claude API Quickstart',url:'https://docs.anthropic.com/en/api/getting-started'},
+           {label:'Anthropic Python SDK',url:'https://github.com/anthropics/anthropic-sdk-python'}
+         ]},
+        {id:'2-3',t:'Amazon Bedrock控制台探索 + 模型测试',
+         d:'Navigate Bedrock console. Test Claude on Bedrock. Compare with direct API. Understand your org\'s model access and quotas.',
+         scenario:'🎯 Scenario: Test whether Bedrock Claude can answer seller questions about your cross-border shipping products accurately.',
+         tags:['wkdy','work','amz'],time:'1h',
+         links:[
+           {label:'Bedrock User Guide',url:'https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html'},
+           {label:'Bedrock Playground',url:'https://docs.aws.amazon.com/bedrock/latest/userguide/playgrounds.html'}
+         ]},
+      ]},
+      { label:'Week 3 — QuickSight + Q: 让仪表板会说话', lessons:[
+        {id:'3-1',t:'QuickSight仪表板构建 + AI功能Q',
+         d:'Build a dashboard from your team\'s data. Enable QuickSight Q for natural language queries. Test with real stakeholder questions.',
+         scenario:'🎯 Scenario: Build a seller adoption funnel dashboard. Enable Q so your sales team can ask "which region has lowest conversion?" in plain English.',
+         tags:['wknd','work','amz','proj'],time:'3h',
+         links:[
+           {label:'QuickSight入门教程',url:'https://docs.aws.amazon.com/quicksight/latest/user/getting-started.html'},
+           {label:'QuickSight Q配置',url:'https://docs.aws.amazon.com/quicksight/latest/user/quicksight-q-setup.html'},
+           {label:'AWS Skill Builder (free)',url:'https://explore.skillbuilder.aws/learn/course/external/view/elearning/16722/amazon-quicksight-getting-started'}
+         ]},
+        {id:'3-2',t:'用Python读取和处理QuickSight导出数据',
+         d:'Export data from QuickSight → process with Python + Claude API → generate narrative insights automatically.',
+         scenario:'🎯 Scenario: Automate your monthly business review data prep — from raw export to formatted talking points.',
+         tags:['wkdy','work','amz'],time:'1.5h',
+         links:[
+           {label:'QuickSight API (boto3)',url:'https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/quicksight.html'}
+         ]},
+      ]},
+      { label:'Week 4 — 巩固 + 第一次成果展示', lessons:[
+        {id:'4-1',t:'整合Week 1-3工具 + 端到端流程测试',
+         d:'Connect your tools: data → Python processing → Claude analysis → QuickSight visualization. Make it repeatable.',
+         scenario:'🎯 Scenario: Run your full pipeline on this week\'s real data. Document what worked and what broke.',
+         tags:['wknd','mac'],time:'2h',links:[]},
+        {id:'4-2',t:'Kiro实战: 用Claude Code改进现有工具',
+         d:'Take your Week 1 automation, use Kiro\'s spec-driven workflow to add error handling, logging, and a simple config file.',
+         scenario:'🎯 Scenario: Make your report tool production-ready so a teammate could run it without your help.',
+         tags:['wknd','mac','amz'],time:'1.5h',
+         links:[{label:'Kiro Spec-driven Dev',url:'https://kiro.dev/docs'}]},
+        {id:'4-3',t:'向1-2位同事Demo你的自动化工具',
+         d:'Show what you built. Get feedback. This is practice for scaling later.',
+         tags:['wkdy','work'],time:'0.5h',links:[]},
+      ]},
+    ]
+  },
+  {
+    id:'p2',cls:'p2',
+    name:'Phase 2 · GTM Intelligence 业务智能',
+    badge:'WEEK 5–8',
+    desc:'Automate market intelligence, seller analysis, and competitive research. Everything learned through your real GTM work. 通过真实GTM工作场景学习自动化市场情报和卖家分析。',
+    weeks:[
+      { label:'Week 5 — 市场情报自动化 Market Intel Pipeline', lessons:[
+        {id:'5-1',t:'数据采集: API + 结构化数据获取',
+         d:'Learn to pull data from APIs (not just scraping). Use Python requests library. Focus on structured data your team needs.',
+         scenario:'🎯 Scenario: Pull public logistics/shipping rate data or marketplace metrics via API to track competitor pricing trends.',
+         tags:['wknd','mac'],time:'2h',
+         links:[
+           {label:'Requests库文档',url:'https://docs.python-requests.org/en/latest/'},
+           {label:'Python API调用教程',url:'https://realpython.com/api-integration-in-python/'}
+         ]},
+        {id:'5-2',t:'[项目] 竞品动态追踪器',
+         d:'Build a tool: collect competitor info → Claude summarizes changes → generates weekly competitive brief for your team.',
+         scenario:'🎯 Scenario: Track what competing cross-border shipping solutions are launching/changing. Auto-generate "Competitive Update" for your sales team.',
+         tags:['wknd','mac','proj'],time:'2.5h',links:[]},
+        {id:'5-3',t:'QuickSight进阶: 嵌入式分析 + 参数化',
+         d:'Add parameters, drill-downs, and calculated fields. Make dashboards self-service for your sales team.',
+         tags:['wkdy','work','amz'],time:'1h',
+         links:[{label:'QuickSight嵌入式分析',url:'https://docs.aws.amazon.com/quicksight/latest/user/embedded-analytics.html'}]},
+      ]},
+      { label:'Week 6 — Bedrock RAG: 让AI理解你的业务文档', lessons:[
+        {id:'6-1',t:'Bedrock Knowledge Bases 搭建',
+         d:'Upload your team\'s SOPs, playbooks, product docs to Bedrock KB. Build a searchable AI knowledge base.',
+         scenario:'🎯 Scenario: New sales rep joins your team. Instead of reading 50 docs, they ask the KB: "What\'s our pitch for sellers shipping to EU?"',
+         tags:['wknd','work','amz','proj'],time:'3h',
+         links:[
+           {label:'Bedrock Knowledge Bases',url:'https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html'},
+           {label:'RAG概念介绍',url:'https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base-retrieve-generate.html'}
+         ]},
+        {id:'6-2',t:'用Claude做结构化Root Cause Analysis',
+         d:'Build a prompt chain: anomaly description → hypothesis generation → data check → conclusion. Reusable for any business deep-dive.',
+         scenario:'🎯 Scenario: Seller adoption dropped 15% in Japan last month. Use your prompt chain to systematically identify why.',
+         tags:['wkdy','work'],time:'1h',links:[]},
+      ]},
+      { label:'Week 7 — 卖家洞察 Seller Intelligence', lessons:[
+        {id:'7-1',t:'[项目] 卖家分群 + 行为分析工具',
+         d:'Cluster sellers by behavior (adoption stage, volume, product mix). Use Claude to generate per-segment insights and recommendations.',
+         scenario:'🎯 Scenario: Identify which seller segments have highest potential for cross-border shipping adoption but aren\'t converting. Why not?',
+         tags:['wknd','mac','proj'],time:'2.5h',links:[]},
+        {id:'7-2',t:'QuickSight + Bedrock集成探索',
+         d:'Explore connecting Bedrock outputs to QuickSight. Understand the art of the possible for AI-enhanced dashboards in your org.',
+         tags:['wkdy','work','amz'],time:'1.5h',
+         links:[{label:'QuickSight GenBI',url:'https://docs.aws.amazon.com/quicksight/latest/user/quicksight-genbi.html'}]},
+      ]},
+      { label:'Week 8 — Phase 2 整合 + Team Demo', lessons:[
+        {id:'8-1',t:'整合所有Phase 2工具 + 准备Demo',
+         d:'Connect competitive intel + seller analysis + Bedrock KB into a cohesive workflow. Prepare presentation.',
+         tags:['wknd','mac'],time:'2h',links:[]},
+        {id:'8-2',t:'Team Demo: 展示AI驱动的GTM智能工具',
+         d:'Present to your 20+ person team. Show real outputs from real data. Collect feedback and next-priority requests.',
+         tags:['wkdy','work'],time:'1h',links:[]},
+      ]},
+    ]
+  },
+  {
+    id:'p3',cls:'p3',
+    name:'Phase 3 · Builder Mode 构建者模式',
+    badge:'WEEK 9–12',
+    desc:'Build tools your team actually uses. Sales enablement content generators, automated business reviews, and an AI playbook for your org. 构建团队实际使用的工具。',
+    weeks:[
+      { label:'Week 9 — 快速原型: 从脚本到Web App', lessons:[
+        {id:'9-1',t:'Streamlit快速原型开发',
+         d:'Turn your Python scripts into shareable web apps in minutes. No frontend experience needed — it\'s Python-native.',
+         scenario:'🎯 Scenario: Turn your seller analysis script into a web tool where sales reps can input a seller ID and get instant AI-generated insights.',
+         tags:['wknd','mac'],time:'2h',
+         links:[
+           {label:'Streamlit官方教程',url:'https://docs.streamlit.io/get-started'},
+           {label:'30天学Streamlit',url:'https://30days.streamlit.app/'}
+         ]},
+        {id:'9-2',t:'用Kiro构建更精致的内部工具',
+         d:'Use Kiro\'s full-stack capability to build a polished version with better UI. Learn the spec → implement → iterate workflow.',
+         tags:['wknd','mac','amz'],time:'2h',
+         links:[{label:'Kiro Docs',url:'https://kiro.dev/docs'}]},
+      ]},
+      { label:'Week 10 — Sales Enablement AI工具', lessons:[
+        {id:'10-1',t:'[项目] Sales Pitch内容生成器',
+         d:'Build a tool: input seller profile + product → AI generates customized pitch outline, talking points, objection handling, and success stories.',
+         scenario:'🎯 Scenario: Your sales rep is meeting a mid-size seller considering cross-border shipping to Germany. Generate a tailored pitch in 30 seconds.',
+         tags:['wknd','mac','proj'],time:'3h',links:[]},
+        {id:'10-2',t:'Bedrock Agents: 多步骤AI工作流',
+         d:'Build an agent that can: query data → analyze → generate report → suggest actions. Your first autonomous AI workflow.',
+         tags:['wkdy','work','amz'],time:'1.5h',
+         links:[{label:'Bedrock Agents文档',url:'https://docs.aws.amazon.com/bedrock/latest/userguide/agents.html'}]},
+      ]},
+      { label:'Week 11 — 自动化Business Review准备', lessons:[
+        {id:'11-1',t:'[项目] WBR/MBR AI准备工具',
+         d:'Automate business review prep: pull metrics → detect anomalies → generate narratives → draft talking points → flag risks/opportunities.',
+         scenario:'🎯 Scenario: It\'s Sunday night. Instead of 3 hours prepping WBR, your tool generates a first draft in 10 minutes. You spend 30 min refining.',
+         tags:['wknd','mac','proj'],time:'3h',links:[]},
+        {id:'11-2',t:'测试与优化: 让工具可靠运行',
+         d:'Add error handling, input validation, fallback logic. Learn to make AI tools production-reliable.',
+         tags:['wkdy','work'],time:'1h',links:[]},
+      ]},
+      { label:'Week 12 — AI Forum领导力', lessons:[
+        {id:'12-1',t:'编写团队AI使用Playbook',
+         d:'Create a practical guide: which AI tools for which tasks, prompt templates, best practices, common pitfalls. Your leadership artifact.',
+         scenario:'🎯 Scenario: New team member asks "how should I use AI in my daily work?" — your playbook is the answer.',
+         tags:['wknd','mac'],time:'2h',links:[]},
+        {id:'12-2',t:'主持AI Forum: 教学 + Use Case征集',
+         d:'Lead your org\'s AI forum. Demo tools, teach prompt engineering, collect high-value use cases from the broader team.',
+         tags:['wkdy','work'],time:'1h',links:[]},
+      ]},
+    ]
+  },
+  {
+    id:'p4',cls:'p4',
+    name:'Phase 4 · Scale & Lead 规模化引领',
+    badge:'WEEK 13–16',
+    desc:'Build your capstone project, scale team impact, and establish yourself as the AI-forward GTM leader. 构建毕业项目，扩大团队影响力，成为AI驱动的GTM领导者。',
+    weeks:[
+      { label:'Week 13 — 高级模式: Multi-Agent + RAG进阶', lessons:[
+        {id:'13-1',t:'Multi-Agent工作流设计',
+         d:'Chain multiple AI "agents": researcher → analyst → writer → reviewer. Each specializes in one step of your business process.',
+         scenario:'🎯 Scenario: "Analyze why our EU cross-border volume is flat" → Agent 1 pulls data → Agent 2 identifies patterns → Agent 3 writes narrative → Agent 4 suggests actions.',
+         tags:['wknd','mac'],time:'2.5h',
+         links:[
+           {label:'Multi-Agent Patterns',url:'https://docs.anthropic.com/en/docs/build-with-claude/agentic-tools'},
+         ]},
+        {id:'13-2',t:'RAG优化: 让Knowledge Base更准确',
+         d:'Improve your Bedrock KB: better chunking, metadata filtering, re-ranking. Make answers more precise.',
+         tags:['wkdy','work','amz'],time:'1.5h',links:[]},
+      ]},
+      { label:'Week 14 — 毕业项目启动 Capstone Project', lessons:[
+        {id:'14-1',t:'[毕业项目] GTM Intelligence Platform v1',
+         d:'Build an integrated platform combining everything: market intel + seller analysis + content generation + report automation + Bedrock KB.',
+         scenario:'🎯 Scenario: Your "one-stop shop" for the GTM team — a single interface that connects all the AI tools you\'ve built over 14 weeks.',
+         tags:['wknd','mac','proj'],time:'3.5h',links:[]},
+        {id:'14-2',t:'Bedrock生产最佳实践: 安全与成本',
+         d:'Learn guardrails, monitoring, cost optimization. Make your tools org-approved and budget-friendly.',
+         tags:['wkdy','work','amz'],time:'1h',
+         links:[{label:'Bedrock Guardrails',url:'https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html'}]},
+      ]},
+      { label:'Week 15 — 打磨与文档', lessons:[
+        {id:'15-1',t:'毕业项目优化 + 用户文档',
+         d:'Polish the UI, add error handling, write user documentation. Make it ready for others to use without you.',
+         tags:['wknd','mac','proj'],time:'2.5h',links:[]},
+        {id:'15-2',t:'个人AI工具箱整理: 脚本、Prompt、工作流',
+         d:'Organize all scripts, prompt templates, and workflows into a clean personal toolkit.',
+         tags:['wknd','mac'],time:'1.5h',links:[]},
+      ]},
+      { label:'Week 16 — 发布 + 下一步', lessons:[
+        {id:'16-1',t:'向Org展示毕业项目 + ROI分析',
+         d:'Present your GTM Intelligence Platform. Quantify: hours saved, insights generated, team adoption rate.',
+         tags:['wkdy','work'],time:'1h',links:[]},
+        {id:'16-2',t:'制定Q+1持续学习计划',
+         d:'Plan your next quarter. What to build next, what to learn, what to delegate. Keep momentum without burnout.',
+         tags:['wknd','mac'],time:'1h',links:[]},
+        {id:'16-3',t:'内部博客/Wiki: 记录你的AI转型之旅',
+         d:'Write up your journey. Share learnings, ROI, and templates. Build your personal brand as the AI-savvy GTM leader.',
+         tags:['wkdy','work'],time:'1h',links:[]},
+      ]},
+    ]
   }
+];
 
-  // 更新总进度
-  function updateProgress() {
-    const all = document.querySelectorAll('.task-check');
-    const checked = document.querySelectorAll('.task-check:checked');
-    const pct = Math.round((checked.length / all.length) * 100);
-    document.getElementById('totalProgress').style.width = pct + '%';
-    document.getElementById('progressText').textContent = pct + '%';
-    // 更新划线样式
-    all.forEach(cb => {
-      const text = cb.parentElement.querySelector('.task-text');
-      if (text) text.classList.toggle('checked', cb.checked);
-    });
-    saveChecks();
-  }
+const PRACTICES = [
+  {title:'Quick Win: 用Claude重写你的周报',cn:'5分钟把枯燥数据变成Business Narrative',diff:'easy',
+   desc:'Take any weekly data dump, paste into Claude, get a polished Amazon-style business narrative with root causes and actions.',
+   steps:['Copy raw data (CSV or table) from your weekly report','Prompt: "You are a senior Amazon GTM analyst. Write a 6-pager style narrative from this data: 1) What happened 2) Why (root cause) 3) So what (impact) 4) Now what (actions). Be concise, data-driven, and use specific numbers."','Compare with your manual version — which is better?','Save the winning prompt to your template library'],
+   tools:['Claude','Your weekly data']},
+  {title:'练习: 自动化你的Seller数据处理',cn:'Automate a repetitive data task from your actual work',diff:'med',
+   desc:'Pick ONE data task you do every week. Use Kiro + Claude Code to automate it. Time yourself: manual vs automated.',
+   steps:['Identify your most repetitive weekly data task','Open Kiro → describe the task in natural language → let Claude Code generate the script','Read the generated code — can you understand what each section does?','Run it on real data. Verify outputs match your manual process.','Measure: X hours/week saved × 50 weeks = your ROI'],
+   tools:['Kiro','Claude Code','Python','Your data']},
+  {title:'练习: QuickSight Q智能仪表板',cn:'Build a self-service dashboard with natural language',diff:'med',
+   desc:'Create a QuickSight dashboard for a metric your team reports on. Enable Q so stakeholders can ask questions in plain English.',
+   steps:['Choose one key metric dashboard (e.g., seller adoption funnel)','Build 3-5 key visuals in QuickSight','Enable Q and configure topics for your dataset','Test with 10 questions a stakeholder would actually ask','Document which questions Q handles well vs. needs tuning'],
+   tools:['QuickSight','QuickSight Q','Your dataset']},
+  {title:'挑战: Bedrock RAG知识库',cn:'Build a Q&A bot from your team documents',diff:'hard',
+   desc:'Upload your team SOPs and playbooks to Bedrock Knowledge Base. Build a chatbot your new team members can use on day one.',
+   steps:['Collect 5-10 key team documents (SOPs, playbooks, product guides)','Create Bedrock KB, configure chunking strategy','Upload docs and test with real questions','Build a simple Streamlit frontend for your team to use','Get 3 teammates to test it and collect feedback'],
+   tools:['Bedrock','Knowledge Bases','Streamlit','Python']},
+  {title:'Quick Win: Kiro 30分钟原型',cn:'Prototype any tool idea in 30 minutes',diff:'easy',
+   desc:'Got a tool idea? Use Kiro\'s spec-driven workflow to go from idea to working prototype in one sitting.',
+   steps:['Write a 3-sentence description of what you want the tool to do','Open Kiro, create a new spec with your description','Let Claude Code generate implementation','Test, iterate with natural language feedback','Decide: polish further or move to next idea?'],
+   tools:['Kiro','Claude Code']},
+];
 
-  // 持久化任务勾选
-  function saveChecks() {
-    const all = document.querySelectorAll('.task-check');
-    const states = Array.from(all).map(cb => cb.checked);
-    localStorage.setItem('taskStates', JSON.stringify(states));
-  }
-  function loadChecks() {
-    const saved = localStorage.getItem('taskStates');
-    if (!saved) return;
-    const states = JSON.parse(saved);
-    const all = document.querySelectorAll('.task-check');
-    all.forEach((cb, i) => { if (states[i] !== undefined) cb.checked = states[i]; });
-    updateProgress();
-  }
+const RESOURCES = [
+  {cat:'Python & Data 编程基础',items:[
+    {icon:'🐍',name:'Python for Everybody (Coursera, Free)',desc:'Dr. Chuck\'s classic — best for re-activation, not starting from scratch',why:'Free, self-paced, skip to the chapters you need',url:'coursera.org/learn/python'},
+    {icon:'🐼',name:'Pandas 10分钟快速入门',desc:'Official Pandas quickstart — the only tutorial you need',why:'Learn by doing, covers 80% of what you\'ll use',url:'pandas.pydata.org/docs/user_guide/10min.html'},
+    {icon:'📊',name:'Mode SQL Tutorial (Interactive)',desc:'Practice SQL in-browser, no setup, instant feedback',why:'Focus on reading SQL, not memorizing syntax',url:'mode.com/sql-tutorial'},
+    {icon:'🎥',name:'freeCodeCamp Python Full Course',desc:'4-hour video covering everything, good for review',why:'Watch at 1.5x speed for areas you\'re rusty on',url:'youtube.com/freecodecamp python'},
+  ]},
+  {cat:'AI & Prompt Engineering 提示词工程',items:[
+    {icon:'🧠',name:'Anthropic Prompt Engineering Guide',desc:'Official patterns, techniques, and best practices',why:'Written by the team behind Claude — the authoritative source',url:'docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview'},
+    {icon:'📖',name:'Prompting Guide (Community)',desc:'Comprehensive prompt engineering techniques with examples',why:'Great for exploring advanced patterns like chain-of-thought',url:'promptingguide.ai'},
+    {icon:'🔧',name:'Claude Code Documentation',desc:'Setup, usage, workflow tips for your existing quota',why:'You already have access — learn to maximize it',url:'docs.anthropic.com/en/docs/claude-code'},
+  ]},
+  {cat:'Amazon Tools 亚马逊工具链',items:[
+    {icon:'📈',name:'QuickSight Learning Path (AWS Skill Builder)',desc:'Free structured course with badge — good for your resume too',why:'Official, comprehensive, and free for Amazon employees',url:'explore.skillbuilder.aws → search QuickSight'},
+    {icon:'🤖',name:'Amazon Bedrock User Guide',desc:'Official docs covering models, KB, agents, guardrails',why:'Your primary reference for all Bedrock features',url:'docs.aws.amazon.com/bedrock/latest/userguide/'},
+    {icon:'🛠️',name:'Kiro Documentation',desc:'Spec-driven AI development environment',why:'Your primary IDE — know it deeply',url:'kiro.dev/docs'},
+    {icon:'💡',name:'Bedrock Workshop (内部Wiki)',desc:'Search your internal wiki for hands-on Bedrock labs',why:'Uses your org\'s specific setup and policies'},
+  ]},
+  {cat:'Web App Building 应用开发',items:[
+    {icon:'🚀',name:'Streamlit Documentation',desc:'Build data apps in pure Python — no frontend needed',why:'Fastest path from script to shareable tool',url:'docs.streamlit.io'},
+    {icon:'📐',name:'Streamlit 30 Days Challenge',desc:'Daily exercises to build Streamlit fluency',why:'Perfect weekend companion — one small exercise per session',url:'30days.streamlit.app'},
+  ]},
+  {cat:'Mindset & Sustainability 心态与可持续',items:[
+    {icon:'📕',name:'Atomic Habits — James Clear',desc:'Build learning systems, not goals. The "2-minute rule" is key.',why:'Why this plan is designed for ~1 hour weekday + ~4 hour weekend'},
+    {icon:'⏱️',name:'Pomodoro Technique 番茄工作法',desc:'25min focus + 5min break. Perfect for weekend learning sessions.',why:'Prevents burnout, maintains quality over 4-hour sessions'},
+  ]},
+];
 
-  // 打卡日历
-  function buildCalendar() {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth();
-    document.getElementById('calTitle').textContent =
-      `${year}年${month + 1}月 打卡记录`;
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const today = now.getDate();
-    const checkins = JSON.parse(localStorage.getItem('checkins') || '{}');
-    const cal = document.getElementById('calendar');
-    cal.innerHTML = '';
-    // 星期标题
-    ['日','一','二','三','四','五','六'].forEach(d => {
-      const el = document.createElement('div');
-      el.className = 'cal-day';
-      el.style.cssText = 'background:transparent;color:#555;font-size:0.7rem;';
-      el.textContent = d;
-      cal.appendChild(el);
-    });
-    // 第一天是星期几
-    const firstDay = new Date(year, month, 1).getDay();
-    for (let i = 0; i < firstDay; i++) {
-      const el = document.createElement('div');
-      el.className = 'cal-day';
-      el.style.background = 'transparent';
-      cal.appendChild(el);
+// ============================================================
+// STATE — Supabase cloud sync + localStorage fallback
+// ============================================================
+const SUPABASE_URL = 'https://cddowglehgzggxkotxpr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_mKG4Yfsa6YaLRXfz7VIwhw_MucMaGF9';
+const TABLE = 'progress';
+const ROW_ID = 'default';
+const LOCAL_KEY = 'ai-skill-forge-v2';
+
+let STATE = {completed:{}, log:[], weeklyMinutes:{}, notes:{}};
+let syncStatus = 'idle'; // idle | syncing | synced | offline
+let darkMode = true; // default dark mode
+let saveTimeout;
+
+async function supaFetch(method, body){
+  const url = `${SUPABASE_URL}/rest/v1/${TABLE}?id=eq.${ROW_ID}`;
+  const headers = {
+    'apikey': SUPABASE_KEY,
+    'Authorization': `Bearer ${SUPABASE_KEY}`,
+    'Content-Type': 'application/json',
+    'Prefer': method === 'POST' ? 'resolution=merge-duplicates' : undefined
+  };
+  Object.keys(headers).forEach(k => headers[k] === undefined && delete headers[k]);
+  const opts = {method, headers};
+  if(body) opts.body = JSON.stringify(body);
+  return fetch(method === 'POST' ? `${SUPABASE_URL}/rest/v1/${TABLE}` : url, opts);
+}
+
+async function loadState(){
+  // 1. Always load localStorage first (instant)
+  try {
+    const local = localStorage.getItem(LOCAL_KEY);
+    if(local) STATE = JSON.parse(local);
+  } catch(e){}
+
+  // 2. Then try cloud sync
+  try {
+    syncStatus = 'syncing'; updateSyncBadge();
+    const res = await supaFetch('GET');
+    if(res.ok){
+      const rows = await res.json();
+      if(rows.length > 0 && rows[0].state){
+        const cloud = rows[0].state;
+        // Merge: cloud wins if it has more completed lessons
+        const cloudDone = Object.keys(cloud.completed || {}).length;
+        const localDone = Object.keys(STATE.completed || {}).length;
+        if(cloudDone >= localDone){
+          STATE = cloud;
+          // Ensure notes property exists
+          if(!STATE.notes) STATE.notes = {};
+          localStorage.setItem(LOCAL_KEY, JSON.stringify(STATE));
+        } else {
+          // Local is ahead, push to cloud
+          await pushToCloud();
+        }
+      } else {
+        // No cloud data yet, push local
+        await pushToCloud();
+      }
+      syncStatus = 'synced';
+    } else {
+      syncStatus = 'offline';
     }
-    for (let d = 1; d <= daysInMonth; d++) {
-      const key = `${year}-${month+1}-${d}`;
-      const el = document.createElement('div');
-      el.className = 'cal-day';
-      if (checkins[key]) el.classList.add('checked-in');
-      if (d === today) el.classList.add('today');
-      el.textContent = d;
-      cal.appendChild(el);
-    }
-    // 连续打卡天数
-    let streak = 0;
-    for (let d = today; d >= 1; d--) {
-      const key = `${year}-${month+1}-${d}`;
-      if (checkins[key]) streak++;
-      else break;
-    }
-    document.getElementById('streakCount').textContent = streak;
-    // 今天是否已打卡
-    const todayKey = `${year}-${month+1}-${today}`;
-    const btn = document.getElementById('checkinBtn');
-    if (checkins[todayKey]) {
-      btn.textContent = '✅ 今日已打卡';
-      btn.disabled = true;
-    }
+  } catch(e){
+    console.log('Cloud sync unavailable, using local', e);
+    syncStatus = 'offline';
   }
+  updateSyncBadge();
+}
 
-  function doCheckin() {
-    const now = new Date();
-    const key = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`;
-    const checkins = JSON.parse(localStorage.getItem('checkins') || '{}');
-    checkins[key] = true;
-    localStorage.setItem('checkins', JSON.stringify(checkins));
-    buildCalendar();
-  }
+async function pushToCloud(){
+  try {
+    await supaFetch('POST', {id: ROW_ID, state: STATE, updated_at: new Date().toISOString()});
+  } catch(e){ console.log('Cloud push failed', e); }
+}
 
-  // 笔记
-  function saveNote() {
-    const val = document.getElementById('noteArea').value;
-    localStorage.setItem('studyNote', val);
-    const btn = document.querySelector('.save-note-btn');
-    btn.textContent = '✅ 已保存';
-    setTimeout(() => btn.textContent = '💾 保存笔记', 1500);
-  }
-  function loadNote() {
-    const saved = localStorage.getItem('studyNote');
-    if (saved) document.getElementById('noteArea').value = saved;
-  }
+async function saveState(){
+  // Always save locally (instant)
+  try { localStorage.setItem(LOCAL_KEY, JSON.stringify(STATE)); } catch(e){}
 
-  // 初始化
-  loadChecks();
-  buildCalendar();
-  loadNote();
+  // Debounce cloud save (avoid hammering on rapid clicks)
+  clearTimeout(saveTimeout);
+  saveTimeout = setTimeout(async () => {
+    try {
+      syncStatus = 'syncing'; updateSyncBadge();
+      await pushToCloud();
+      syncStatus = 'synced'; updateSyncBadge();
+    } catch(e){
+      syncStatus = 'offline'; updateSyncBadge();
+    }
+  }, 800);
+}
+
+function updateSyncBadge(){
+  const el = document.getElementById('sync-status');
+  if(!el) return;
+  const map = {
+    idle: '⏳',
+    syncing: '🔄 Syncing...',
+    synced: '☁️ Synced 已同步',
+    offline: '📴 Offline 离线'
+  };
+  el.textContent = map[syncStatus] || '';
+  el.className = 'sync-badge ' + syncStatus;
+}
+
+// Export/Import still available as backup
+function exportProgress(){
+  const data = JSON.stringify(STATE, null, 2);
+  const blob = new Blob([data], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'ai-forge-progress.json';
+  a.click(); URL.revokeObjectURL(url);
+}
+
+function importProgress(){
+  const input = document.createElement('input');
+  input.type = 'file'; input.accept = '.json';
+  input.onchange = async(e) => {
+    const file = e.target.files[0]; if(!file) return;
+    const text = await file.text();
+    try {
+      STATE = JSON.parse(text);
+      saveState(); render();
+      alert('Progress imported successfully! ✅ 进度已导入！');
+    } catch(err){ alert('Invalid file format 文件格式错误'); }
+  };
+  input.click();
+}
+
+function toggleLesson(id){
+  if(STATE.completed[id]){delete STATE.completed[id];STATE.log=STATE.log.filter(l=>l.id!==id)}
+  else{STATE.completed[id]=Date.now();STATE.log.unshift({id,date:new Date().toISOString().slice(0,10),t:getLessonTitle(id)});if(STATE.log.length>50)STATE.log.pop()}
+  saveState();render();
+}
+function getLessonTitle(id){for(const p of PHASES)for(const w of p.weeks)for(const l of w.lessons)if(l.id===id)return l.t;return id}
+function getTotalLessons(){let c=0;PHASES.forEach(p=>p.weeks.forEach(w=>c+=w.lessons.length));return c}
+function getCompletedCount(){return Object.keys(STATE.completed).length}
+function getPhaseProgress(pid){const p=PHASES.find(x=>x.id===pid);if(!p)return 0;let t=0,d=0;p.weeks.forEach(w=>w.lessons.forEach(l=>{t++;if(STATE.completed[l.id])d++}));return t?Math.round(d/t*100):0}
+function getPhaseNums(pid){let t=0,d=0;PHASES.find(x=>x.id===pid)?.weeks.forEach(w=>w.lessons.forEach(l=>{t++;if(STATE.completed[l.id])d++}));return{t,d}}
+function getStreak(){if(!STATE.log.length)return 0;const dates=[...new Set(STATE.log.map(l=>l.date))].sort().reverse();let s=0;const d=new Date();for(let i=0;i<60;i++){const ds=d.toISOString().slice(0,10);if(dates.includes(ds)){s++;d.setDate(d.getDate()-1)}else if(i===0){d.setDate(d.getDate()-1)}else break}return s}
+function getCurrentWeek(){const done=getCompletedCount();if(!done)return 1;for(const p of PHASES)for(const w of p.weeks){const wd=w.lessons.filter(l=>STATE.completed[l.id]).length;if(wd<w.lessons.length)return PHASES.indexOf(p)*4+p.weeks.indexOf(w)+1}return 16}
+
+// ============================================================
+// RENDER
+// ============================================================
+let activeTab='roadmap';
+function setTab(t){activeTab=t;render()}
+
+function render(){
+  const total=getTotalLessons(),done=getCompletedCount(),pct=total?Math.round(done/total*100):0;
+  document.getElementById('app').innerHTML=`
+    <div class="hero">
+      <h1><span>AI Skill Forge for Aaron</span></h1>
+      <div class="sub">16-Week AI Capability Plan for Amazon GTM Leaders</div>
+      <div class="sub-cn">为Amazon GTM领导者定制 · Vibe Coding优先 · 工作场景驱动</div>
+    </div>
+    <div class="stats-bar">
+      <div class="stat c1"><div class="val">${getStreak()}</div><div class="lbl">Day Streak 🔥</div></div>
+      <div class="stat c2"><div class="val">${done}/${total}</div><div class="lbl">Completed ✅</div></div>
+      <div class="stat c3"><div class="val">${pct}%</div><div class="lbl">Progress 📊</div></div>
+      <div class="stat c4"><div class="val">W${getCurrentWeek()}</div><div class="lbl">Current 📍</div></div>
+    </div>
+    <div class="sync-bar">
+      <span id="sync-status" class="sync-badge ${syncStatus}">${{idle:'⏳',syncing:'🔄 Syncing...',synced:'☁️ Synced 已同步',offline:'📴 Offline 离线'}[syncStatus]||''}</span>
+      <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark/light mode">${darkMode?'☀️':'🌙'}</button>
+      <button class="sync-btn" onclick="exportProgress()">📤 Export 导出</button>
+      <button class="sync-btn" onclick="importProgress()">📥 Import 导入</button>
+      <button class="sync-btn reset-btn" onclick="if(confirm('Reset all progress? 确认重置所有进度？')){STATE={completed:{},log:[],weeklyMinutes:{},notes:{}};saveState();render()}">🗑 Reset</button>
+    </div>
+    <div class="tabs">
+      ${['roadmap','progress','practice','resources'].map(t=>`<button class="tab-btn ${activeTab===t?'on':''}" onclick="setTab('${t}')">${{roadmap:'📋 Roadmap',progress:'📊 Progress',practice:'🎯 Practice',resources:'📚 Resources'}[t]}</button>`).join('')}
+    </div>
+    <div class="panel ${activeTab==='roadmap'?'on':''}">${renderRoadmap()}</div>
+    <div class="panel ${activeTab==='progress'?'on':''}">${renderProgress()}</div>
+    <div class="panel ${activeTab==='practice'?'on':''}">${renderPractice()}</div>
+    <div class="panel ${activeTab==='resources'?'on':''}">${renderResources()}</div>`;
+}
+
+function renderRoadmap(){
+  // Philosophy banner
+  let html=`<div class="philosophy">
+    <h3>Why "Read & Verify" before "Write from Scratch"? 为什么先学"读懂"而不是"从零写"？</h3>
+    <p>You already know vibe coding works — you've built HTML with Gemini and tools with Claude Code. The gap isn't "can AI write code?" — it's <span class="highlight">"can I trust the output?"</span><br><br>
+    When Claude Code generates a Pandas script for your seller data, you need to verify it's not silently dropping rows. When QuickSight shows wrong numbers, you need to read the calculated field logic. When a Bedrock RAG answer seems off, you need to debug the pipeline.<br><br>
+    <span class="highlight">This plan teaches you to read 80% and write 20%</span> — just enough coding literacy to be a confident, effective AI-powered builder. Every lesson uses your real Amazon GTM work as the learning context.<br><br>
+    你已经知道AI能写代码了。这个计划教你的是：<span class="highlight">如何验证AI的输出是否正确，如何在出错时调试</span>。每节课都用你真实的Amazon工作场景作为学习背景。</p>
+  </div>`;
+
+  html+=PHASES.map(p=>{
+    const {t:total,d:done}=getPhaseNums(p.id);
+    const pct=total?Math.round(done/total*100):0;
+    return `<div class="phase ${p.cls}">
+      <div class="phase-head">
+        <div class="phase-dot"></div>
+        <div class="phase-name">${p.name}</div>
+        <div class="phase-badge">${p.badge} · ${pct}%</div>
+      </div>
+      <div class="phase-desc">${p.desc}</div>
+      ${p.weeks.map(w=>`<div class="week-group">
+        <div class="week-lbl">${w.label}</div>
+        ${w.lessons.map(l=>`<div class="lesson">
+          <button class="chk ${STATE.completed[l.id]?'done':''}" onclick="toggleLesson('${l.id}')"></button>
+          <div class="lesson-body">
+            <div class="lesson-t ${STATE.completed[l.id]?'struck':''}">${l.t}</div>
+            <div class="lesson-d">${l.d}</div>
+            ${l.scenario?`<div class="lesson-scenario">${l.scenario}</div>`:''}
+            <div class="lesson-tags">
+              ${l.tags.map(tg=>`<span class="t t-${tg}">${{wknd:'🗓 Weekend',wkdy:'📅 Weekday',work:'💼 Work PC',mac:'💻 Mac',proj:'🚀 Project',amz:'🟠 Amazon'}[tg]||tg}</span>`).join('')}
+            </div>
+            ${l.links&&l.links.length?`<div class="lesson-links">${l.links.map(lk=>`<a class="res-link" href="${lk.url&&lk.url.startsWith('http')?lk.url:'https://'+lk.url}" target="_blank" rel="noopener">${lk.label}</a>`).join('')}</div>`:''}
+            <textarea class="lesson-notes" placeholder="📝 Your notes and learnings for this lesson... 记录你的学习心得..." oninput="saveNote('${l.id}', this.value)">${(STATE.notes && STATE.notes[l.id]) || ''}</textarea>
+          </div>
+          <div class="time-est">${l.time}</div>
+        </div>`).join('')}
+      </div>`).join('')}
+    </div>`}).join('');
+  return html;
+}
+
+function renderProgress(){
+  const colors=[
+    {name:'Phase 1 读懂AI输出',id:'p1',color:'var(--emerald)'},
+    {name:'Phase 2 业务智能',id:'p2',color:'var(--sky)'},
+    {name:'Phase 3 构建者模式',id:'p3',color:'var(--violet)'},
+    {name:'Phase 4 规模化引领',id:'p4',color:'var(--amber)'},
+  ];
+  const rings=colors.map(c=>{
+    const pct=getPhaseProgress(c.id),{t,d}=getPhaseNums(c.id);
+    const r=22,circ=2*Math.PI*r,off=circ-(pct/100)*circ;
+    return `<div class="ring-card">
+      <svg viewBox="0 0 56 56"><circle cx="28" cy="28" r="${r}" fill="none" stroke="var(--s3)" stroke-width="5"/>
+      <circle cx="28" cy="28" r="${r}" fill="none" stroke="${c.color}" stroke-width="5" stroke-dasharray="${circ}" stroke-dashoffset="${off}" stroke-linecap="round" transform="rotate(-90 28 28)" style="transition:.6s"/>
+      <text x="28" y="32" text-anchor="middle" fill="${c.color}" font-size="13" font-family="Geist Mono,monospace" font-weight="600">${pct}%</text></svg>
+      <div><div class="r-title">${c.name}</div><div class="r-sub">${d}/${t} lessons</div></div></div>`}).join('');
+
+  const dateCounts={};STATE.log.forEach(l=>{dateCounts[l.date]=(dateCounts[l.date]||0)+1});
+  const heatCells=[];const d=new Date();d.setDate(d.getDate()-119);
+  for(let i=0;i<120;i++){const ds=d.toISOString().slice(0,10);const cnt=dateCounts[ds]||0;heatCells.push(`<div class="hc ${cnt===0?'':cnt===1?'l1':cnt===2?'l2':cnt<=3?'l3':'l4'}" title="${ds}: ${cnt}"></div>`);d.setDate(d.getDate()+1)}
+
+  const logHtml=STATE.log.slice(0,12).map(l=>`<div class="log-entry"><span class="log-date">${l.date}</span><span>✅ ${l.t}</span></div>`).join('')||'<div style="color:var(--dim);font-size:13px;padding:8px 0">No activity yet — check off your first lesson! 还没有记录，开始吧！</div>';
+
+  return `<div class="ring-grid">${rings}</div>
+    <div class="heat-section"><div class="heat-title">Activity Heatmap 学习热力图</div><div class="heat-sub">Last 120 days / 最近120天</div><div class="heat-grid">${heatCells.join('')}</div></div>
+    <div class="log-section" style="margin-top:16px"><div class="log-title">Recent Activity 最近记录</div>${logHtml}</div>`;
+}
+
+function renderPractice(){
+  return `<div style="font-size:13px;color:var(--dim);margin-bottom:16px;line-height:1.5">Standalone exercises you can do anytime, using your real Amazon work data. Start with ⚡Easy for quick wins. 随时可做的练习，用你真实的工作数据。</div>`+
+  PRACTICES.map(p=>`<div class="drill">
+    <h3>${p.title}</h3><div class="drill-cn">${p.cn}</div>
+    <span class="drill-diff ${p.diff}">${{easy:'⚡ EASY',med:'🔶 MEDIUM',hard:'💎 HARD'}[p.diff]}</span>
+    <p>${p.desc}</p>
+    <ol>${p.steps.map(s=>`<li>${s}</li>`).join('')}</ol>
+    <div class="tused">${p.tools.map(t=>`<span class="tt">${t}</span>`).join('')}</div>
+  </div>`).join('');
+}
+
+function renderResources(){
+  return RESOURCES.map(g=>`<div class="res-group"><h3>${g.cat}</h3>
+    ${g.items.map(r=>`<div class="res-item">
+      <div class="res-item-head"><span class="res-icon">${r.icon}</span><span class="res-name">${r.name}</span></div>
+      <div class="res-desc">${r.desc}</div>
+      ${r.url?`<a class="link-url" href="${r.url.startsWith('http')?r.url:'https://'+r.url}" target="_blank" rel="noopener" style="display:block;color:var(--sky);text-decoration:none">${r.url}</a>`:''}
+      <div class="res-why">💡 ${r.why}</div>
+    </div>`).join('')}
+  </div>`).join('');
+}
+
+function toggleTheme(){
+  darkMode = !darkMode;
+  document.documentElement.classList.toggle('light', !darkMode);
+  localStorage.setItem('theme', darkMode ? 'dark' : 'light');
+  render();
+}
+
+function saveNote(lessonId, note){
+  if(!STATE.notes) STATE.notes = {};
+  STATE.notes[lessonId] = note;
+  saveState();
+}
+
+// INIT
+(async()=>{
+  // Load theme preference
+  const savedTheme = localStorage.getItem('theme');
+  if(savedTheme === 'light'){
+    darkMode = false;
+    document.documentElement.classList.add('light');
+  }
+  await loadState();
+  render();
+})();
 </script>
 </body>
 </html>
